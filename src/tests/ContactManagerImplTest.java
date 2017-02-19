@@ -19,7 +19,7 @@ public class ContactManagerImplTest {
 
 	@Test
 	public void checkAddFutureMeetingId() {
-		int output = cm.addFutureMeeting(//parameters);
+		int output = cm.addFutureMeeting(parameters);
 		assertTrue(output > 0);
 	}
 
@@ -56,13 +56,14 @@ public class ContactManagerImplTest {
 	@Test(expected = IllegalStateException.class)
 	public void testIllegalState_meetingInPast() {
 		//create a Future meeting shell with ID
-		cm.getPastMeeting(//id);
+		cm.getPastMeeting(id);
 	}
 
 	@Test
 	public void testGetPastMeeting_noMeeting() {
 		//expected null
-		cm.getPastMeeting(//id);
+		cm.getPastMeeting(id);
+		assertTrue(null)
 	}
 
 	@Test
@@ -86,7 +87,7 @@ public class ContactManagerImplTest {
 	@Test
 	public void testGetFutureMeeting_noMeeting() {
 		//expected null
-		cm.getFutureMeeting(//id);
+		cm.getFutureMeeting(id);
 	}
 
 	@Test
@@ -351,8 +352,8 @@ public class ContactManagerImplTest {
   
 	@Test
 	public void testGetContacts_noContacts() {
-		cm.getContacts("//name");
-		//Expected = Error
+		cm.getContacts("hfikb");
+		//Expected error
 	}
   
 	@Test

@@ -1,10 +1,11 @@
 package tests;
+import implementations.ContactManagerImpl;
 import org.junit.*;
 import interfaces.ContactManager;
 import static org.junit.Assert.*;
 
 public class ContactManagerImplTest {
-	private ContactManager cm;
+	private ContactManagerImpl cm;
 	
 	@Before
 	public void setUp() {

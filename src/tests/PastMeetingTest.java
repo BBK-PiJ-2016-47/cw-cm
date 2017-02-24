@@ -1,10 +1,14 @@
 package tests;
+import java.util.Calendar;
 import org.junit.*; 
 import static org.junit.Assert.*;
 import org.junit.Before;
 
 public class PastMeetingTest {
-	private PastMeetingImpl test;
+	PastMeetingImpl test;
+	Set<Contact> contacts;
+	Calendar date;
+	
 	
 	@Before
 	public void setUp() {

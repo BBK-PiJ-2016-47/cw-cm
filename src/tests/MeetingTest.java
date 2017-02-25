@@ -7,6 +7,7 @@ import interfaces.Meeting;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -23,6 +24,7 @@ public class MeetingTest {
 	public void setUp() {
 		date = new GregorianCalendar(2017,9,20);
 		test = new MeetingImpl(date, contacts);
+		contacts = new LinkedHashSet<Contact>();
 	}
 
 	@Test

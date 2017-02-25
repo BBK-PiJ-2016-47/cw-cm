@@ -2,6 +2,7 @@ package tests;
 import interfaces.Contact;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.junit.*; 
@@ -20,6 +21,7 @@ public class PastMeetingTest {
 	@Before
 	public void setUp() {
 		date = new GregorianCalendar(2016,9,20);
+		contacts = new LinkedHashSet<Contact>();
 		test = new PastMeetingImpl(date,contacts,"Here are some notes");
 	}
 	

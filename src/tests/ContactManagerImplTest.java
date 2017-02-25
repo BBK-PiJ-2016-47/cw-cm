@@ -8,6 +8,7 @@ import interfaces.ContactManager;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.junit.*;
@@ -23,6 +24,7 @@ public class ContactManagerImplTest {
 	
 	@Before
 	public void setUp() {
+		contacts = new LinkedHashSet<Contact>();
 		pastDate = new GregorianCalendar(2016,9,20);
 		futureDate = new GregorianCalendar(2017,9,20);
 		cm = new ContactManagerImpl();

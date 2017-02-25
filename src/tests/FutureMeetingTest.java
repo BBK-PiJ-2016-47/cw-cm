@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.junit.Before;
@@ -20,6 +21,7 @@ public class FutureMeetingTest {
 	
 	@Before
 	public void setUp() {
+		contacts = new LinkedHashSet<Contact>();
 		date = new GregorianCalendar(2017,9,20);
 		test = new FutureMeetingImpl(date, contacts);
 	}

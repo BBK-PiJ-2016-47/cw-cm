@@ -3,16 +3,15 @@ import implementations.ContactManagerImpl;
 import implementations.FutureMeetingImpl;
 import implementations.MeetingImpl;
 import implementations.PastMeetingImpl;
-
-import org.junit.*;
-
 import interfaces.Contact;
 import interfaces.ContactManager;
-import static org.junit.Assert.*;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Set;
+
+import org.junit.*;
+import static org.junit.Assert.*;
 
 public class ContactManagerImplTest {
 	private ContactManagerImpl cm;

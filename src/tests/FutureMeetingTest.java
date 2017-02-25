@@ -29,7 +29,7 @@ public class FutureMeetingTest {
 	@Test
 	public void testGetters() {
     	assertTrue(test.getId() != 0);
-    	assertTrue(test.getId() > 1000);
+    	assertTrue(test.getId() > 0);
     	assertTrue(test.getDate().equals(date));
     	assertTrue(test.getContacts().equals(contacts));
 	}

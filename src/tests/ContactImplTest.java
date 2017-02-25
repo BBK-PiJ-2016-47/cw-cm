@@ -27,6 +27,9 @@ public class ContactImplTest {
     	test.addNotes("This is the note!");
     	output = test.getNotes();
     	assertTrue(output.equals("This is the note!"));
+    	test.addNotes("");
+    	output = test.getNotes();
+    	assertTrue(output.equals(""));
     	
     }
 

@@ -10,20 +10,22 @@ public class ContactImplTest {
 
 	@Before
 	public void buildUp() {
-		test = new ContactImpl();
+		test = new ContactImpl("Wolverine", "Can be challenging");
 	}
 	
     @Test
     public void checkGetters() {
     	assertTrue(test.getId() != 0);
     	assertTrue(test.getId() > 0);
-    	assertTrue(test.getName() != null);
+    	assertTrue(test.getName().equals("Wolverine"));
     }
   
     @Test
     public void checkAddAndGetNotes() {
-    	test.addNotes("This is the note!");
     	String output = test.getNotes();
+    	assertTrue(output.equals("Can be challenging"));
+    	test.addNotes("This is the note!");
+    	output = test.getNotes();
     	assertTrue(output.equals("This is the note!"));
     	
     }

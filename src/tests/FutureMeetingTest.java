@@ -1,22 +1,22 @@
 package tests;
 
 import interfaces.FutureMeeting;
-import interfaces.Meeting;
 import static org.junit.Assert.*;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import implementations.FutureMeetingImpl;
-import implementations.PastMeetingImpl;
-
+import interfaces.Contact;
 public class FutureMeetingTest {
 
 	FutureMeeting test;
 	Calendar date;
+	Set<Contact> contacts;
 	
 	@Before
 	public void setUP() {

@@ -1,6 +1,8 @@
 package tests;
+import interfaces.Contact;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Set;
 
 import org.junit.*; 
 import static org.junit.Assert.*;
@@ -44,8 +46,8 @@ public class PastMeetingTest {
 	@Test
 	public void checkGetNotes_NoNotes() {
 		PastMeetingImpl emptyNoteTest = new PastMeetingImpl(date, contacts, "");
-		String output = test.getNotes();
-		assertTrue(output.equals(""));
+		String tester = emptyNoteTest.getNotes();
+		assertTrue(tester.equals(""));
 	}
 
 

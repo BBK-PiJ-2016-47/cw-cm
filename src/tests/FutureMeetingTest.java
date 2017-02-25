@@ -19,7 +19,7 @@ public class FutureMeetingTest {
 	Set<Contact> contacts;
 	
 	@Before
-	public void setUP() {
+	public void setUp() {
 		date = new GregorianCalendar(2017,9,20);
 		test = new FutureMeetingImpl(date, contacts);
 	}
@@ -27,7 +27,7 @@ public class FutureMeetingTest {
 	@Test
 	public void testGetters() {
     	assertTrue(test.getId() != 0);
-    	assertTrue(test.getId() > 0);
+    	assertTrue(test.getId() > 1000);
     	assertTrue(test.getDate().equals(date));
     	assertTrue(test.getContacts().equals(contacts));
 	}

@@ -1,15 +1,39 @@
 package tests;
 import implementations.ContactManagerImpl;
+import implementations.FutureMeetingImpl;
+import implementations.MeetingImpl;
+import implementations.PastMeetingImpl;
+
 import org.junit.*;
+
+import interfaces.Contact;
 import interfaces.ContactManager;
 import static org.junit.Assert.*;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Set;
+
 public class ContactManagerImplTest {
 	private ContactManagerImpl cm;
+	private Calendar pastDate;
+	private Calendar futureDate;
+	private Set<Contact> contacts;
+	private MeetingImpl pastMeeting;
+	private MeetingImpl futureMeeting;
 	
 	@Before
 	public void setUp() {
-		  cm = new ContactManagerImpl();
+		pastDate = new GregorianCalendar(2016,9,20);
+		futureDate = new GregorianCalendar(2017,9,20);
+		cm = new ContactManagerImpl();
+		pastMeeting = new PastMeetingImpl(pastDate,contacts,"Here are some notes");
+		futureMeeting = new FutureMeetingImpl(futureDate, contacts);
+	}
+	
+	//method for checking meetings against each other
+	private boolean meetingEquivalence(MeetingImpl meeting1, MeetingImpl meeting2) {
+		return (meeting1.equals(meeting2));
 	}
 	
 /**
@@ -17,11 +41,12 @@ public class ContactManagerImplTest {
   * For addFutureMeeting() method
   *
   */
-
+	
 	@Test
 	public void checkAddFutureMeetingId() {
-		int output = cm.addFutureMeeting(parameters);
+		int output = cm.addFutureMeeting(contacts, futureDate);
 		assertTrue(output > 0);
+		assertTrue(output < 1000);
 	}
 
 //check ID is unique
@@ -30,21 +55,20 @@ public class ContactManagerImplTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testIllegalArgument_pastDate() {
-		cm.addFutureMeeting(Bob, 12/12/12);
+		cm.addFutureMeeting(contacts, pastDate);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void testIllegalArgument_noContact() {     
-		cm.addFutureMeeting(Blank, 12/12/17);
+	public void testIllegalArgumentFuture_noContact() {     
+		cm.addFutureMeeting(null, futureDate);
 	}
 
 //test for nullpointerexception if meeting or date is null
 
 	@Test(expected = NullPointerException.class)
-	public void testNullException() {
+	public void testNullException_Date() {
 		//what does it mean if meeting is null?
-		//add new contact Bob so only testing date
-		cm.addFutureMeeting(Bob, null);
+		cm.addFutureMeeting(contacts, null);
 	}
 
 /**
@@ -57,44 +81,47 @@ public class ContactManagerImplTest {
 	@Test(expected = IllegalStateException.class)
 	public void testIllegalState_meetingInPast() {
 		//create a Future meeting shell with ID
-		cm.getPastMeeting(id);
+		cm.getPastMeeting(1001);
 	}
 
 	@Test
 	public void testGetPastMeeting_noMeeting() {
-		//expected null
-		cm.getPastMeeting(id);
-		assertTrue(null)
+		PastMeetingImpl getted = cm.getPastMeeting(77);
+		assertTrue(meetingEquivalence(null, getted));
 	}
+
 
 	@Test
 	public void testGetPastMeeting_Meeting() {
-		//create a past meeting shell with ID
-		cm.getPastMeeting(//id);
+		PastMeetingImpl getted = cm.getPastMeeting(1);
+		assertTrue(meetingEquivalence(pastMeeting, getted));
 	}
+
+
 
 /**
   *
   * For getFutureMeeting() method
   *
   */
+	
 
 	@Test(expected = IllegalStateException.class)
 	public void testIllegalState_meetingInFuture() {
 		//create a Past meeting shell with ID
-		cm.getFutureMeeting(//id);
+		cm.getFutureMeeting(1);
 	}
 
 	@Test
 	public void testGetFutureMeeting_noMeeting() {
-		//expected null
-		cm.getFutureMeeting(id);
+		FutureMeetingImpl getted = cm.getFutureMeeting(800000);
+		assertTrue(meetingEquivalence(null, getted));
 	}
 
 	@Test
 	public void testGetFutureMeeting_Meeting() {
-		//create a futuremeeting shell with ID
-		cm.getFutureMeeting(//id);
+		FutureMeetingImpl getted = cm.getFutureMeeting(1001);
+		assertTrue(meetingEquivalence(pastMeeting, getted));
 	}
 
 
@@ -109,14 +136,16 @@ public class ContactManagerImplTest {
 	@Test
 	public void testGetMeeting_noMeeting() {
 		//expected null
-		cm.getMeeting(//id);
+		MeetingImpl test = cm.getMeeting(8000000);
+		assertTrue(meetingEquivalence(null, test));
 	}
 
 	
 	@Test
 	public void testGetMeeting_Meeting() {
 		//create a meeting shell with ID
-		cm.getMeeting(//id);
+		MeetingImpl test = cm.getMeeting(1);
+		assertTrue(meetingEquivalence(pastMeeting, test));
 	}
 
 
@@ -128,6 +157,7 @@ public class ContactManagerImplTest {
   */
 
 //just testing it returns a list
+	
 	@Test
 	public void testGetFutureMeetingList() {
 		cm.getFutureMeetingList(//contact);
@@ -216,6 +246,7 @@ public class ContactManagerImplTest {
   */
 
 //just testing it returns a list
+	
 	@Test
 	public void testGetPastMeetingListFor() {
 		cm.getPastMeetingListFor(//contact);
@@ -262,7 +293,6 @@ public class ContactManagerImplTest {
   */
 
 	// testing it returns a past list for current meeting
-
 	@Test
 	public void testAddMeetingNotes() {     
 		cm.addMeetingNotes(//id, text);
@@ -302,13 +332,13 @@ public class ContactManagerImplTest {
 
 	@Test
 	public void testAddNewContact() {
-		cm.addNewContact(//name, notes);
-		//returns ID number
+		int idToTest = cm.addNewContact("Bob", "makes a great burger");
+		assertTrue(idToTest > 0);
 	}
 
 	@Test
 	public void testIDNumber() {
-		cm.addNewContact(//name, notes);
+		cm.addNewContact("Bob", "makes a great burger");
 		//check ID generated isn't a duplicate
 	}
 

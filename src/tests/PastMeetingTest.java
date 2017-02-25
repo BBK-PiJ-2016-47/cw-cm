@@ -29,6 +29,11 @@ public class PastMeetingTest {
     	assertTrue(test.getContacts().equals(contacts));
 	}
 	
+	public void testDate() {
+		assertEquals(2016,test.getDate().get(Calendar.YEAR));
+		assertEquals(9, test.getDate().get(Calendar.MONTH));
+		assertEquals(20, test.getDate().get(Calendar.DATE));
+	}
 	
 	@Test
 	public void checkGetNotes_WithNotes() {

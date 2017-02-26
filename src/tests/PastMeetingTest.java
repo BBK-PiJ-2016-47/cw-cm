@@ -9,6 +9,7 @@ import org.junit.*;
 import static org.junit.Assert.*;
 import org.junit.Before;
 
+import implementations.ContactImpl;
 import implementations.PastMeetingImpl;
 
 public class PastMeetingTest {
@@ -16,13 +17,17 @@ public class PastMeetingTest {
 	PastMeetingImpl test;
 	Set<Contact> contacts;
 	Calendar date;
+	int count;
+	Contact profX;
 	
 	
 	@Before
-	public void setUp() {
+	public void setUp() throws Exception {
+		profX = new ContactImpl(5, "Professor X", "Headmaster at Xavier's School for Gifted Youngsters");
 		date = new GregorianCalendar(2016,9,20);
 		contacts = new LinkedHashSet<Contact>();
-		test = new PastMeetingImpl(date,contacts,"Here are some notes");
+		contacts.add(profX);
+		test = new PastMeetingImpl(5,date,contacts,"Here are some notes");
 	}
 	
 	@Test
@@ -46,8 +51,8 @@ public class PastMeetingTest {
 	}
 	
 	@Test
-	public void checkGetNotes_NoNotes() {
-		PastMeetingImpl emptyNoteTest = new PastMeetingImpl(date, contacts, "");
+	public void checkGetNotes_NoNotes() throws Exception {
+		PastMeetingImpl emptyNoteTest = new PastMeetingImpl(5,date, contacts, "");
 		String tester = emptyNoteTest.getNotes();
 		assertTrue(tester.equals(""));
 	}

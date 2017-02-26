@@ -10,7 +10,7 @@ public class ContactImplTest {
 
 	@Before
 	public void buildUp() {
-		test = new ContactImpl("Wolverine", "Can be challenging");
+		test = new ContactImpl(2, "Wolverine", "");
 	}
 	
     @Test
@@ -23,13 +23,13 @@ public class ContactImplTest {
     @Test
     public void checkAddAndGetNotes() {
     	String output = test.getNotes();
-    	assertTrue(output.equals("Can be challenging"));
-    	test.addNotes("This is the note!");
-    	output = test.getNotes();
-    	assertTrue(output.equals("This is the note!"));
-    	test.addNotes("");
-    	output = test.getNotes();
     	assertTrue(output.equals(""));
+    	test.addNotes("Can be challenging");
+    	output = test.getNotes();
+    	assertTrue(output.equals(", Can be challenging"));
+    	test.addNotes("has good hair");
+    	output = test.getNotes();
+    	assertTrue(output.equals(", Can be challenging, has good hair"));
     	
     }
 

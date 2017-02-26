@@ -1,4 +1,4 @@
-package tests;
+/*package tests;
 import implementations.FutureMeetingImpl;
 import implementations.MeetingImpl;
 import interfaces.Contact;
@@ -42,3 +42,4 @@ public class MeetingTest {
 	}
 
 }
+*/

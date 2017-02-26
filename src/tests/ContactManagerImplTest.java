@@ -5,9 +5,11 @@ import implementations.MeetingImpl;
 import implementations.PastMeetingImpl;
 import interfaces.Contact;
 import interfaces.ContactManager;
+import interfaces.Meeting;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -15,12 +17,12 @@ import org.junit.*;
 import static org.junit.Assert.*;
 
 public class ContactManagerImplTest {
-	private ContactManagerImpl cm;
+	private ContactManager cm;
 	private Calendar pastDate;
 	private Calendar futureDate;
 	private Set<Contact> contacts;
-	private MeetingImpl pastMeeting;
-	private MeetingImpl futureMeeting;
+	private Meeting pastMeeting;
+	private Meeting futureMeeting;
 	
 	@Before
 	public void setUp() {
@@ -333,40 +335,42 @@ public class ContactManagerImplTest {
 
 	@Test
 	public void testAddNewContact() {
-		int idToTest = cm.addNewContact("Bob", "makes a great burger");
-		assertTrue(idToTest > 0);
+		cm.addNewContact("Bob", "makes a great burger");
 	}
 
 	@Test
 	public void testIDNumber() {
-		cm.addNewContact("Bob", "makes a great burger");
-		//check ID generated isn't a duplicate
+		int idToTest = cm.addNewContact("Bob", "makes a great burger");
+		assertTrue(idToTest > 0);
+		boolean unique = true;
+		Iterator<Contact> checks = contacts.iterator();
+		while(checks.hasNext()) {
+			if(contacts.contains(idToTest)){
+				unique = false;
+			}
+		}
+		assertTrue(unique);
+
 	}
 
 	@Test(expected = NullPointerException.class)
-	public void testNullPointer_notes() {     
-		//make sure name is for relevant contact, notes
-		//are null
-		cm.addMeetingNotes(//name, notes);
+	public void testNullPointer_ContactNotes() {     
+		cm.addNewContact("Linda", null);
 	}
 
 	@Test(expected = NullPointerException.class)
-	public void testNullPointer_name() {     
-		//name null, notes not
-		cm.addMeetingNotes(//name, notes);
-	}
-
-
-	@Test(expected = IllegalArgumentException.class)
-	public void testIllegalArgument_name() {     
-		//if name is empty
-		cm.addMeetingNotes(//name, notes);
+	public void testNullPointer_ContactName() {     
+		cm.addNewContact(null, "likes wine");
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void testIllegalArgument_notes() {     
-		//if notes empty
-		cm.addMeetingNotes(//name, notes);
+	public void testIllegalArgument_ContactName() {     
+		cm.addNewContact("", "likes wine");
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testIllegalArgument_ContactNotes() {     
+		cm.addNewContact("Linda", "");
 	}
 
 

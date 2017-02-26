@@ -11,6 +11,7 @@ import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 
+import implementations.ContactImpl;
 import implementations.FutureMeetingImpl;
 import interfaces.Contact;
 public class FutureMeetingTest {
@@ -18,12 +19,15 @@ public class FutureMeetingTest {
 	FutureMeeting test;
 	Calendar date;
 	Set<Contact> contacts;
+	Contact jeanGrey;
 	
 	@Before
-	public void setUp() {
+	public void setUp() throws Exception {
 		contacts = new LinkedHashSet<Contact>();
 		date = new GregorianCalendar(2017,9,20);
-		test = new FutureMeetingImpl(date, contacts);
+		jeanGrey = new ContactImpl(3, "Jean Grey", "Has a bit of a temper sometimes");
+		contacts.add(jeanGrey);
+		test = new FutureMeetingImpl(6, date, contacts);
 	}
 
 	@Test

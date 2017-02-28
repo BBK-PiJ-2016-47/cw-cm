@@ -1,4 +1,5 @@
 package tests;
+import implementations.ContactImpl;
 import implementations.ContactManagerImpl;
 import implementations.FutureMeetingImpl;
 import implementations.PastMeetingImpl;
@@ -184,10 +185,12 @@ public class ContactManagerImplTest {
  *		cm.getFutureMeetingList(Wolverine);
  *	//how do you check type in JUnit?
  *	}
- 
+ *
+ */
 	@Test(expected = IllegalArgumentException.class)
 	public void testIllegalArgument_noFutureContact() {
-		cm.getFutureMeetingList(Ben);
+		Contact noLinkedContact = new ContactImpl(1, "Test", "notes");
+		cm.getFutureMeetingList(noLinkedContact);
 	}
 
 	

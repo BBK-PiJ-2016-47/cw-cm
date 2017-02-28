@@ -1,7 +1,6 @@
 package tests;
 import implementations.ContactManagerImpl;
 import implementations.FutureMeetingImpl;
-import implementations.MeetingImpl;
 import implementations.PastMeetingImpl;
 import interfaces.Contact;
 import interfaces.ContactManager;
@@ -9,10 +8,11 @@ import interfaces.FutureMeeting;
 import interfaces.Meeting;
 import interfaces.PastMeeting;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.*;
@@ -23,12 +23,14 @@ public class ContactManagerImplTest {
 	private Calendar pastDate;
 	private Calendar futureDate;
 	private Set<Contact> contacts;
+	private List<Meeting> meetings;
 	private Meeting pastMeeting;
 	private Meeting futureMeeting;
 	
 	@Before
 	public void setUp() throws Exception {
-		contacts = new LinkedHashSet<Contact>();
+		contacts = new HashSet<Contact>();
+		meetings = new ArrayList<Meeting>();
 		pastDate = new GregorianCalendar(2016,9,20);
 		futureDate = new GregorianCalendar(2017,9,20);
 		cm = new ContactManagerImpl();
@@ -49,20 +51,26 @@ public class ContactManagerImplTest {
 	
 	@Test
 	public void checkAddFutureMeetingId() {
-		int idToTest = cm.addFutureMeeting(contacts, futureDate);
+		int idToTest = 0;
+		try {
+			idToTest = cm.addFutureMeeting(contacts, futureDate);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		assertTrue(idToTest > 0);
 		boolean unique = true;
-		Iterator<Contact> checks = contacts.iterator();
-		while(checks.hasNext()) {
-			if(contacts.contains(idToTest)){
+		/* list for meetings needed
+		for(Meeting meeting : contacts) {
+			int existingId = contact.getId();
+			if (existingId == idToTest) {
 				unique = false;
 			}
-		}
-		assertTrue(unique);
+		}*/
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void testIllegalArgument_pastDate() {
+	public void testIllegalArgument_pastDate() throws Exception {
 		cm.addFutureMeeting(contacts, pastDate);
 	}
 	/* What if the contact doesn't exist? How to test for this?
@@ -72,14 +80,14 @@ public class ContactManagerImplTest {
 	 *	cm.addFutureMeeting()
 	 * }
 	 */
-	
+
 	@Test(expected = NullPointerException.class)
-	public void testNullException_Contacts() { 
+	public void testNullException_Contacts() throws Exception { 
 		cm.addFutureMeeting(null, futureDate);
 	}
 
 	@Test(expected = NullPointerException.class)
-	public void testNullException_Date() {
+	public void testNullException_Date() throws Exception {
 		cm.addFutureMeeting(contacts, null);
 	}
 
@@ -88,7 +96,6 @@ public class ContactManagerImplTest {
   * For getPastMeeting() method
   *
   */
-
 
 	@Test(expected = IllegalStateException.class)
 	public void testIllegalState_meetingInPast() {
@@ -115,7 +122,7 @@ public class ContactManagerImplTest {
   * For getFutureMeeting() method
   *
   */
-	
+
 
 	@Test(expected = IllegalStateException.class)
 	public void testIllegalState_meetingInFuture() {
@@ -151,9 +158,15 @@ public class ContactManagerImplTest {
 
 	
 	@Test
-	public void testGetMeeting_Meeting() {
+	public void testGetMeeting_pastMeeting() {
 		Meeting test = cm.getMeeting(1);
 		assertTrue(meetingEquivalence(pastMeeting, test));
+	}
+	
+	@Test
+	public void testGetMeeting_futureMeeting() {
+		Meeting test = cm.getMeeting(1001);
+		assertTrue(meetingEquivalence(futureMeeting, test));
 	}
 
 
@@ -171,7 +184,7 @@ public class ContactManagerImplTest {
  *		cm.getFutureMeetingList(Wolverine);
  *	//how do you check type in JUnit?
  *	}
- */
+ 
 	@Test(expected = IllegalArgumentException.class)
 	public void testIllegalArgument_noFutureContact() {
 		cm.getFutureMeetingList(Ben);
@@ -211,7 +224,7 @@ public class ContactManagerImplTest {
   *
   * For getMeetingListOn() method
   *
-  */
+  
 
 //just testing it returns a list
 	
@@ -249,7 +262,7 @@ public class ContactManagerImplTest {
   *
   * For getPastMeetingListFor() method
   *
-  */
+  
 
 //just testing it returns a list
 	
@@ -296,7 +309,7 @@ public class ContactManagerImplTest {
   *
   * For addMeetingNotes() method
   *
-  */
+  
 
 	// testing it returns a past list for current meeting
 	@Test
@@ -321,6 +334,7 @@ public class ContactManagerImplTest {
 	}
 
 	@Test(expected = NullPointerException.class)
+	public void testNullMeetingNotes(){
 		cm.addMeetingNotes(1, null);
 	}
 
@@ -341,14 +355,13 @@ public class ContactManagerImplTest {
 		int idToTest = cm.addNewContact("Bob", "makes a great burger");
 		assertTrue(idToTest > 0);
 		boolean unique = true;
-		Iterator<Contact> checks = contacts.iterator();
-		while(checks.hasNext()) {
-			if(contacts.contains(idToTest)){
+		for(Contact contact : contacts) {
+			int existingId = contact.getId();
+			if (existingId == idToTest) {
 				unique = false;
 			}
 		}
 		assertTrue(unique);
-
 	}
 
 	@Test(expected = NullPointerException.class)
@@ -376,7 +389,7 @@ public class ContactManagerImplTest {
   *
   * For getContacts(String) method
   *
-  */
+  
   
 	@Test
 	public void testGetContacts_knownContact() {
@@ -401,5 +414,5 @@ public class ContactManagerImplTest {
 		//name null, notes not
 		cm.getContacts(null);
 	}
-
+*/
 }

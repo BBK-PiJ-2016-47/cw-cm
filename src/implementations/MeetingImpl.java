@@ -4,17 +4,27 @@ import interfaces.Contact;
 import interfaces.Meeting;
 import java.util.*;
 
-public class MeetingImpl implements Meeting {
+public abstract class MeetingImpl implements Meeting {
 	private int id;
 	private Calendar date;
 	private Set<Contact> contacts;
-	private static int counter;
 	
-	public MeetingImpl(Calendar date, Set<Contact> contacts){
+	public MeetingImpl(int id, Calendar date, Set<Contact> contacts) throws Exception{
+		
+	if (id < 1) {
+		throw new IllegalArgumentException();
+	}
+	
+	if(contacts.isEmpty()) {
+		throw new IllegalArgumentException();
+	}
+	
+	if (date == null || contacts == null){
+		throw new NullPointerException();
+	}
+		this.id = id;
 		this.date = date;
 		this.contacts = contacts;
-		counter++;
-		this.id = counter;
 	}
 
 	@Override
@@ -29,6 +39,6 @@ public class MeetingImpl implements Meeting {
 	
 	@Override
 	public Set<Contact> getContacts(){
-		return this.contacts;
+		return new HashSet<Contact>(contacts);
 	}
 }

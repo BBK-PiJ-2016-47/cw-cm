@@ -19,9 +19,18 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 	public PastMeeting getPastMeeting(int id){
 		Meeting past = getMeeting(id);
 		if (past.getDate().after(Calendar.getInstance())) {
-			throw new IllegalArgumentException("This date is in the past!");
+			throw new IllegalArgumentException("This date is in the future!");
 		}
 		return (PastMeeting) past;
+	}
+	
+	@Override
+	public FutureMeeting getFutureMeeting(int id){
+		Meeting future = getMeeting(id);
+		if (future.getDate().before(Calendar.getInstance())) {
+			throw new IllegalArgumentException("This date is in the past!");
+		}
+		return (FutureMeeting) future;
 	}
 	
 }

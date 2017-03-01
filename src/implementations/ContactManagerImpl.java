@@ -71,7 +71,27 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 		return meetingGot;
 	}
 	
-	//List<Meeting> getFutureMeetingList(Contact contact);
+	public List<Meeting> getFutureMeetingList(Contact contact) {
+    	List<Meeting> filteredList = new ArrayList<Meeting>();
+    	if(!contacts.contains(contact)){
+    		throw new IllegalArgumentException("The contact doesn't exist!");
+    	}
+
+    	if(contact == null) {
+    		throw new NullPointerException("The contact you've entered is null!");
+    	}
+    	for (int i = 0; i < meetings.size(); i++){
+			if (meetings.get(i).getDate().after(Calendar.getInstance())) {
+				Meeting future;
+				future = meetings.get(i);
+				if (future.getContacts().equals(contact)){
+					filteredList.add(future);
+				}
+			}
+			
+    	}
+    	return filteredList;
+    }
 	
 	//List<Meeting> getMeetingListOn(Calendar date);
 	

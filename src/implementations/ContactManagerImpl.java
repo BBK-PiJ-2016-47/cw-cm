@@ -12,12 +12,30 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 	private Calendar date;
 	private List<Meeting> meetings = new ArrayList<Meeting>();
 	private static int contactCount;
+	private static int meetingCount;
 	
-/*
- * 	@Override
- *	public int addFutureMeeting(Set<Contact>contacts, Calendar date) {
- *	}
- */
+	@Override
+	public int addFutureMeeting(Set<Contact>contacts, Calendar date) {
+		FutureMeeting newMeeting = null;
+		try {
+			int newId = (meetingCount + 1001);
+			
+			newMeeting = new FutureMeetingImpl(newId, date, contacts);
+			meetingCount++;
+			meetings.add(newMeeting);
+			
+		} catch (IllegalArgumentException e) {
+			System.out.println("Date is in the past or contact isn't known.");
+		} catch (NullPointerException e) {
+			System.out.println("You've included a null parameter!");
+		} catch (Exception e) {
+			System.out.println("Something else went wrong, see stack trace");
+			e.printStackTrace();
+		}
+		return newMeeting.getId();
+
+	}
+	 
 
 	@Override
 	public PastMeeting getPastMeeting(int id){

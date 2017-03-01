@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Set;
 
 import interfaces.*;
@@ -8,6 +10,7 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 	
 	private Set<Contact> contacts;
 	private Calendar date;
+	private List<Meeting> meetings = new ArrayList<Meeting>();
 	
 /*
  * 	@Override
@@ -33,4 +36,20 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 		return (FutureMeeting) future;
 	}
 	
+	@Override
+	public Meeting getMeeting(int id){
+		Meeting meetingGot = null;
+		try {
+			meetingGot = meetings.get(id);
+		} catch (IllegalArgumentException e) {
+			System.out.println("Your id must be more than 1 and your contacts must exist");
+		} catch (NullPointerException e) {
+			System.out.println("Your contacts or the date must not be null");
+		} catch (Exception e) {
+			System.out.println("There is another issue (see stack trace)");
+			e.printStackTrace();
+		}
+		return meetingGot;
+		
+	}
 }

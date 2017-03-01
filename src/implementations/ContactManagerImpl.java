@@ -95,7 +95,27 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 	
 	//List<Meeting> getMeetingListOn(Calendar date);
 	
-	//List<PastMeeting> getPastMeetingListFor(Contact contact);
+	public List<PastMeeting> getPastMeetingListFor(Contact contact){
+	List<PastMeeting> pastFilteredList = new ArrayList<PastMeeting>();
+	if(!contacts.contains(contact)){
+		throw new IllegalArgumentException("The contact doesn't exist!");
+	}
+
+	if(contact == null) {
+		throw new NullPointerException("The contact you've entered is null!");
+	}
+	for (int i = 0; i < meetings.size(); i++){
+		if (meetings.get(i).getDate().before(Calendar.getInstance())) {
+			Meeting past;
+			past = meetings.get(i);
+			if (past.getContacts().equals(contact)){
+				pastFilteredList.add((PastMeeting) past);
+			}
+		}
+		
+	}
+	return pastFilteredList;
+}
 	
 	//int addNewPastMeeting(Set<Contact> contacts, Calendar date, String text);
 	

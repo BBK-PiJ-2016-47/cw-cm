@@ -53,6 +53,17 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 		return meetingGot;
 	}
 	
+	//List<Meeting> getFutureMeetingList(Contact contact);
+	
+	//List<Meeting> getMeetingListOn(Calendar date);
+	
+	//List<PastMeeting> getPastMeetingListFor(Contact contact);
+	
+	//int addNewPastMeeting(Set<Contact> contacts, Calendar date, String text);
+	
+	//PastMeeting addMeetingNotes(int id, String text);
+	
+	
 	@Override
 	public int addNewContact(String name, String notes){
 		contactCount++;
@@ -61,4 +72,10 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 		contacts.add(contact);
 		return contact.getId();
 	}
+	
+	// Set<Contact> getContacts(String name);
+	
+	//Set<Contact> getContacts(int... ids);
+	
+	//void flush();
 }

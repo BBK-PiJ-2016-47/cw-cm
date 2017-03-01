@@ -72,13 +72,14 @@ public class ContactManagerImplTest {
 	public void testIllegalArgument_pastDate() throws Exception {
 		cm.addFutureMeeting(contacts, pastDate);
 	}
-	/* What if the contact doesn't exist? How to test for this?
-	 * 
-	 * @Test(expected = IllegalArgumentException.class)
-	 * public void testIllegalArgumentFuture_noContact() {
-	 *	cm.addFutureMeeting()
-	 * }
-	 */
+
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testIllegalArgumentFuture_noContact() {
+		Contact noLinkedContact = new ContactImpl(1, "Test", "notes");
+		cm.getFutureMeetingList(noLinkedContact);
+	}
+	 
 
 	@Test(expected = NullPointerException.class)
 	public void testNullException_Contacts() throws Exception { 

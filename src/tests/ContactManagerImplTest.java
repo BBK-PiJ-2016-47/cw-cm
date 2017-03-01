@@ -25,6 +25,7 @@ public class ContactManagerImplTest {
 	private Calendar futureDate;
 	private Set<Contact> contacts;
 	private List<Meeting> meetings;
+	private List<Meeting> filteredList;
 	private Meeting pastMeeting;
 	private Meeting futureMeeting;
 	private Contact profX;
@@ -40,6 +41,7 @@ public class ContactManagerImplTest {
 		futureMeeting = new FutureMeetingImpl(1001, futureDate, contacts);
 		profX = new ContactImpl(5, "Professor X", "headmaster of Xavier's school for gifted youngsters");
 		contacts.add(profX);
+		filteredList = new ArrayList<Meeting>();
 		
 	}
 	
@@ -203,9 +205,6 @@ public class ContactManagerImplTest {
 		cm.getFutureMeetingList(null);
 	}
 
-	//needs to return a list of chronologically sorted meetings
-	//no duplicate meetings
-	//can be empty
 	@Test
 	public void testGetFutureMeetingList_Empty() {
 		Contact cyclops = new ContactImpl(2, "Cyclops", "don't let him take off his glasses");
@@ -216,14 +215,22 @@ public class ContactManagerImplTest {
 	
 	@Test
 	public void testGetFutureMeetingList_Chronology() {
-		List filteredList = cm.getFutureMeetingList(profX);
+		filteredList = cm.getFutureMeetingList(profX);
 		int size = filteredList.size();
-		//in chronological order
+		boolean chronological = true;
+		for(int i = 0; i < size; i++){
+			Meeting first = filteredList.get(i);
+			Meeting second = filteredList.get(i + 1);
+			if(first.getDate().after(second.getDate())){
+				chronological = false;
+			}
+		}
+		assertTrue(chronological);
 	}
 
 	@Test
 	public void testGetFutureMeetingList_Duplicates() {
-		List filteredList = cm.getFutureMeetingList(profX);
+		filteredList = cm.getFutureMeetingList(profX);
 		int size = filteredList.size();
 		boolean duplicate = false;
 		for(int i = 0; i< size; i++){

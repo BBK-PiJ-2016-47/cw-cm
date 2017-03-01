@@ -27,6 +27,7 @@ public class ContactManagerImplTest {
 	private List<Meeting> meetings;
 	private Meeting pastMeeting;
 	private Meeting futureMeeting;
+	private Contact profX;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -37,10 +38,13 @@ public class ContactManagerImplTest {
 		cm = new ContactManagerImpl();
 		pastMeeting = new PastMeetingImpl(1, pastDate,contacts,"Here are some notes");
 		futureMeeting = new FutureMeetingImpl(1001, futureDate, contacts);
+		profX = new ContactImpl(5, "Professor X", "headmaster of Xavier's school for gifted youngsters");
+		contacts.add(profX);
+		
 	}
 	
 	//method for checking meetings against each other
-	private boolean meetingEquivalence(Meeting meeting1, Meeting meeting2) {
+	private boolean meetingEquivalence(Object meeting1, Object meeting2) {
 		return (meeting1.equals(meeting2));
 	}
 	
@@ -204,21 +208,31 @@ public class ContactManagerImplTest {
 	//can be empty
 	@Test
 	public void testGetFutureMeetingList_Empty() {
-		//must return empty List/null
-		cm.getFutureMeetingList(//contact);
+		Contact cyclops = new ContactImpl(2, "Cyclops", "don't let him take off his glasses");
+		contacts.add(cyclops);
+		cm.getFutureMeetingList(cyclops);
 	}
 
 	
 	@Test
 	public void testGetFutureMeetingList_Chronology() {
-		cm.getFutureMeetingList(//existingcontact);
-		//need to traverse through list checking dates are chronological
+		List filteredList = cm.getFutureMeetingList(profX);
+		int size = filteredList.size();
+		//in chronological order
 	}
 
 	@Test
 	public void testGetFutureMeetingList_Duplicates() {
-		cm.getFutureMeetingList(//existingcontact);
-		//need to traverse through list checking there are no duplicates
+		List filteredList = cm.getFutureMeetingList(profX);
+		int size = filteredList.size();
+		boolean duplicate = false;
+		for(int i = 0; i< size; i++){
+			if (meetingEquivalence(filteredList.get(i), filteredList.get(i+1))){
+				duplicate = true;
+			}
+		}
+		
+		assertFalse(duplicate);
 	}
 
 

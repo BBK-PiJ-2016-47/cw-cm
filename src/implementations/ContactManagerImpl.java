@@ -11,6 +11,7 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 	private Set<Contact> contacts;
 	private Calendar date;
 	private List<Meeting> meetings = new ArrayList<Meeting>();
+	private static int contactCount;
 	
 /*
  * 	@Override
@@ -50,6 +51,14 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 			e.printStackTrace();
 		}
 		return meetingGot;
-		
+	}
+	
+	@Override
+	public int addNewContact(String name, String notes){
+		contactCount++;
+		int newId = contactCount;
+		Contact contact = new ContactImpl(newId,name, notes);
+		contacts.add(contact);
+		return contact.getId();
 	}
 }

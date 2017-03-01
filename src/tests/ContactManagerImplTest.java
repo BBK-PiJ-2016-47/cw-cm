@@ -177,15 +177,19 @@ public class ContactManagerImplTest {
   *
   */
 
-//just testing it returns a list
-/*
- *	@Test
- *	public void testGetFutureMeetingList() {
- *		cm.getFutureMeetingList(profX);
- *	//how do you check type in JUnit?
- *	}
- *
- */
+
+ 	@Test
+ 	public void testGetFutureMeetingList() {
+ 		boolean aList = true;
+ 		try {
+ 		List<Meeting> testerList = cm.getFutureMeetingList(profX);
+ 		//if this assignment works then method returns a list
+ 		} catch (Exception e){
+ 			aList = false;
+ 		}
+ 		assertTrue(aList);
+ 	}
+ 
 	@Test(expected = IllegalArgumentException.class)
 	public void testIllegalArgument_noFutureContact() {
 		Contact noLinkedContact = new ContactImpl(1, "Test", "notes");

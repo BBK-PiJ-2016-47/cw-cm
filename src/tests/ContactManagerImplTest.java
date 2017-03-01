@@ -32,15 +32,15 @@ public class ContactManagerImplTest {
 	
 	@Before
 	public void setUp() throws Exception {
+		profX = new ContactImpl(5, "Professor X", "headmaster of Xavier's school for gifted youngsters");
 		contacts = new HashSet<Contact>();
+		contacts.add(profX);
 		meetings = new ArrayList<Meeting>();
 		pastDate = new GregorianCalendar(2016,9,20);
 		futureDate = new GregorianCalendar(2017,9,20);
 		cm = new ContactManagerImpl();
 		pastMeeting = new PastMeetingImpl(1, pastDate,contacts,"Here are some notes");
 		futureMeeting = new FutureMeetingImpl(1001, futureDate, contacts);
-		profX = new ContactImpl(5, "Professor X", "headmaster of Xavier's school for gifted youngsters");
-		contacts.add(profX);
 		filteredList = new ArrayList<Meeting>();
 		
 	}
@@ -62,19 +62,11 @@ public class ContactManagerImplTest {
 		try {
 			idToTest = cm.addFutureMeeting(contacts, futureDate);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		assertTrue(idToTest > 0);
-		boolean unique = true;
-		/* list for meetings needed
-		for(Meeting meeting : contacts) {
-			int existingId = contact.getId();
-			if (existingId == idToTest) {
-				unique = false;
-			}
-		}*/
 	}
+	
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testIllegalArgument_pastDate() throws Exception {
@@ -188,7 +180,7 @@ public class ContactManagerImplTest {
 /*
  *	@Test
  *	public void testGetFutureMeetingList() {
- *		cm.getFutureMeetingList(Wolverine);
+ *		cm.getFutureMeetingList(profX);
  *	//how do you check type in JUnit?
  *	}
  *

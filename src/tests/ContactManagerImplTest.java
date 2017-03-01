@@ -182,7 +182,7 @@ public class ContactManagerImplTest {
  	public void testGetFutureMeetingList() {
  		boolean aList = true;
  		try {
- 		List<Meeting> testerList = cm.getFutureMeetingList(profX);
+ 		List<Meeting> testFutureList = cm.getFutureMeetingList(profX);
  		//if this assignment works then method returns a list
  		} catch (Exception e){
  			aList = false;
@@ -283,46 +283,68 @@ public class ContactManagerImplTest {
   *
   * For getPastMeetingListFor() method
   *
+  */
   
 
-//just testing it returns a list
-	
-	@Test
-	public void testGetPastMeetingListFor() {
-		cm.getPastMeetingListFor(//contact);
-	}
-
+ 	@Test
+ 	public void testGetPastMeetingListFor() {
+ 		boolean aList = true;
+ 		try {
+ 		List<PastMeeting> testPastList = cm.getPastMeetingListFor(profX);
+ 		//if this assignment works then method returns a list
+ 		} catch (Exception e){
+ 			aList = false;
+ 		}
+ 		assertTrue(aList);
+ 	}
+ 
 	@Test(expected = IllegalArgumentException.class)
-	public void testIllegalArgument_noContact() {
-		//make sure contact doesn't exist
-		cm.getPastMeetingListFor(Ben);
+	public void testIllegalArgument_noPastContact() {
+		Contact noLinkedContact = new ContactImpl(1, "Test", "notes");
+		cm.getPastMeetingListFor(noLinkedContact);
 	}
 
+	
 	@Test(expected = NullPointerException.class)
-	public void testNullPointer() {     
-    	//create null contact?
-    	cm.getPastMeetingListFor(null);
+	public void testNullPointer_NullPastContact() {
+		cm.getPastMeetingListFor(null);
 	}
 
-	//needs to return a list of chronologically sorted meetings
-	//no duplicate meetings
-	//can be empty
 	@Test
 	public void testGetPastMeetingListFor_Empty() {
-		//must return empty List/null
-		cm.getPastMeetingListFor(//contact);
+		Contact cyclops = new ContactImpl(2, "Cyclops", "don't let him take off his glasses");
+		contacts.add(cyclops);
+		cm.getPastMeetingListFor(cyclops);
+	}
+
+	
+	@Test
+	public void testGetPastMeetingList_Chronology() {
+		List<PastMeeting> pastFilteredList = cm.getPastMeetingListFor(profX);
+		int size = pastFilteredList.size();
+		boolean chronological = true;
+		for(int i = 0; i < size; i++){
+			Meeting first = pastFilteredList.get(i);
+			Meeting second = pastFilteredList.get(i + 1);
+			if(first.getDate().before(second.getDate())){
+				chronological = false;
+			}
+		}
+		assertTrue(chronological);
 	}
 
 	@Test
-	public void testGetPastMeetingListFor_Chronology() {
-    	cm.getPastMeetingListFor(//existingcontact)
-    	//need to traverse through list checking dates are chronological
-	}
-
-	@Test
-	public void testGetPastMeetingListFor_Duplicates() {
-		cm.getPastMeetingListFor(//existingcontact);
-		//need to traverse through list checking there are no duplicates
+	public void testGetPastMeetingList_Duplicates() {
+		List<PastMeeting> pastFilteredList = cm.getPastMeetingListFor(profX);
+		int size = pastFilteredList.size();
+		boolean duplicate = false;
+		for(int i = 0; i< size; i++){
+			if (meetingEquivalence(pastFilteredList.get(i), pastFilteredList.get(i+1))){
+				duplicate = true;
+			}
+		}
+		
+		assertFalse(duplicate);
 	}
 
 

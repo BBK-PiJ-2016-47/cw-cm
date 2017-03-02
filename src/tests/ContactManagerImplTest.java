@@ -21,6 +21,7 @@ import static org.junit.Assert.*;
 
 public class ContactManagerImplTest {
 	private ContactManager cm;
+	private Calendar emptyDate;
 	private Calendar pastDate;
 	private Calendar futureDate;
 	private Set<Contact> contacts;
@@ -32,6 +33,7 @@ public class ContactManagerImplTest {
 	
 	@Before
 	public void setUp() throws Exception {
+		emptyDate = new GregorianCalendar(2014,12,25);
 		profX = new ContactImpl(5, "Professor X", "headmaster of Xavier's school for gifted youngsters");
 		contacts = new HashSet<Contact>();
 		contacts.add(profX);
@@ -245,37 +247,60 @@ public class ContactManagerImplTest {
   *
   * For getMeetingListOn() method
   *
-  
+  */
 
 //just testing it returns a list
 	
 	@Test
 	public void testGetMeetingListOn() {     
-		cm.getMeetingListOn(//date);
-	}
+		 		boolean aList = true;
+ 		try {
+ 		List<Meeting> testList = cm.getMeetingListOn(pastDate);
+ 		//if this assignment works then method returns a list
+ 		} catch (Exception e){
+ 			aList = false;
+ 		}
+ 		assertTrue(aList);
+ 	}
 
 	@Test
 	public void testGetMeetingListOn_Empty() {
-		//must return empty List/null
-		cm.getMeetingListOn(//date);
+		List<Meeting> emptyList = cm.getMeetingListOn(emptyDate);
+		assertTrue(emptyList.isEmpty());
 	}
 
 	@Test
 	public void testGetMeetingListOn_Chronology() {
-		cm.getMeetingListOn(//date);
-		//need to traverse through list checking dates are chronological
+		cm.getMeetingListOn(pastDate);
+		int size = filteredList.size();
+		boolean chronological = true;
+		for(int i = 0; i < size; i++){
+			Meeting first = filteredList.get(i);
+			Meeting second = filteredList.get(i + 1);
+			if(first.getDate().after(second.getDate())){
+				chronological = false;
+			}
+		}
+		assertTrue(chronological);
 	}
 
 	@Test
 	public void testGetMeetingListOn_Duplicates() {
-		cm.getMeetingListOn(//date);
-		//need to traverse through list checking there are no duplicates
+		cm.getMeetingListOn(pastDate);
+		int size = filteredList.size();
+		boolean duplicate = false;
+		for(int i = 0; i< size; i++){
+			if (meetingEquivalence(filteredList.get(i), filteredList.get(i+1))){
+				duplicate = true;
+			}
+		}
+		
+		assertFalse(duplicate);
 	}
 
 	
 	@Test(expected = NullPointerException.class)
 	public void testNullPointer() {     
-		//create null contact?
 		cm.getMeetingListOn(null);
 	}
 

@@ -71,6 +71,7 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 		return meetingGot;
 	}
 	
+	@Override
 	public List<Meeting> getFutureMeetingList(Contact contact) {
     	List<Meeting> filteredList = new ArrayList<Meeting>();
     	if(!contacts.contains(contact)){
@@ -93,8 +94,19 @@ public class ContactManagerImpl implements ContactManager, Serializable {
     	return filteredList;
     }
 	
-	//List<Meeting> getMeetingListOn(Calendar date);
+	@Override
+	public List<Meeting> getMeetingListOn(Calendar date){
+    	List<Meeting> filteredList = new ArrayList<Meeting>();
+    	for (int i = 0; i < meetings.size(); i++){
+			if (meetings.get(i).getDate().equals(date)) {
+				Meeting meeting = meetings.get(i);
+				filteredList.add(meeting);
+				}
+			}
+    	return filteredList;
+	}
 	
+	@Override
 	public List<PastMeeting> getPastMeetingListFor(Contact contact){
 	List<PastMeeting> pastFilteredList = new ArrayList<PastMeeting>();
 	if(!contacts.contains(contact)){

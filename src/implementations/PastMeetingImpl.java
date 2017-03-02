@@ -23,5 +23,9 @@ public class PastMeetingImpl extends MeetingImpl implements PastMeeting{
 	public String getNotes() {
 		return this.notes;
 	}
+	
+	public void addNotes(String text){
+		this.notes += "; " + text;
+	}
 
 }

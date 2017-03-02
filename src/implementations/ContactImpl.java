@@ -1,6 +1,4 @@
 package implementations;
-import java.util.HashSet;
-import java.util.Set;
 
 import interfaces.Contact;
 
@@ -8,7 +6,6 @@ public class ContactImpl implements Contact {
 	private int id;
 	private String name;
 	private String notes;
-	private Set<Contact> contacts = new HashSet<Contact>();
 	  
 	public ContactImpl(int id, String name, String notes){
 		if (id < 1) {
@@ -22,7 +19,6 @@ public class ContactImpl implements Contact {
 		this.id = id;
 		this.name = name;
 		this.notes = notes;
-		contacts.add(this);
 	}
 	
 	public ContactImpl(int id, String name){
@@ -47,7 +43,7 @@ public class ContactImpl implements Contact {
 	
 	@Override
 	public void addNotes(String note) {
-		this.notes += ", " + note;
+		this.notes += "; " + note;
 	}
 
 }

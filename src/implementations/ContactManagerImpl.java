@@ -131,7 +131,22 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 	
 	//int addNewPastMeeting(Set<Contact> contacts, Calendar date, String text);
 	
-	//PastMeeting addMeetingNotes(int id, String text);
+	
+	@Override
+	public PastMeeting addMeetingNotes(int id, String text){
+		if (text == null){
+			throw new NullPointerException("The notes are null!");
+		}
+		Meeting got = meetings.get(id);
+		if(got.getDate().after(Calendar.getInstance()) || got == null) {
+			throw new IllegalArgumentException("This is not a past meeting!");
+		}
+		 
+		PastMeetingImpl pastGot = (PastMeetingImpl) got;
+		
+		pastGot.addNotes(text);
+		return (PastMeeting) got;
+	}
 	
 	
 	@Override

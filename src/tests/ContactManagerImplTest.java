@@ -12,6 +12,7 @@ import interfaces.PastMeeting;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -193,7 +194,7 @@ public class ContactManagerImplTest {
  	}
  
 	@Test(expected = IllegalArgumentException.class)
-	public void testIllegalArgument_noFutureContact() {
+	public void testIllegalArgument_noFutureContact() throws Exception {
 		Contact noLinkedContact = new ContactImpl(1, "Test", "notes");
 		cm.getFutureMeetingList(noLinkedContact);
 	}
@@ -208,7 +209,8 @@ public class ContactManagerImplTest {
 	public void testGetFutureMeetingList_Empty() {
 		Contact cyclops = new ContactImpl(2, "Cyclops", "don't let him take off his glasses");
 		contacts.add(cyclops);
-		cm.getFutureMeetingList(cyclops);
+		List<Meeting> cyclopsMeetings = cm.getFutureMeetingList(cyclops);
+		assertTrue(cyclopsMeetings.isEmpty());
 	}
 
 	
@@ -371,6 +373,44 @@ public class ContactManagerImplTest {
 		
 		assertFalse(duplicate);
 	}
+	
+	//addNewPastMeeting()
+	
+	@Test
+	public void checkAddPastMeetingId() {
+		int idToTest = 0;
+		try {
+			idToTest = cm.addNewPastMeeting(contacts, futureDate, "forgot about this one");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		assertTrue(idToTest > 0);
+	}
+	
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testIllegalArgument_futureDate() throws Exception {
+		cm.addNewPastMeeting(contacts, futureDate, "notes");
+	}
+
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testIllegalArgumentPast_noContact() {
+		Set<Contact> emptyContacts = new HashSet<Contact>();
+		cm.addNewPastMeeting(emptyContacts, pastDate, "notes");
+	}
+	 
+
+	@Test(expected = NullPointerException.class)
+	public void testNullException_pastContacts() throws Exception { 
+		cm.addNewPastMeeting(null, pastDate, "notes");
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void testNullException_pastDate() throws Exception {
+		cm.addNewPastMeeting(contacts, null, "notes");
+	}
+
 
 
   /**
@@ -391,7 +431,7 @@ public class ContactManagerImplTest {
 	}
 
 	@Test(expected = IllegalStateException.class)
-	public void testIllegalState_futureMeeting() {     
+	public void testIllegalState_futureMeeting() throws Exception {     
 		cm.addMeetingNotes(1001, "That was nice wasn't it");;
 	}
 

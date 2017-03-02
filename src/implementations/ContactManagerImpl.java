@@ -2,6 +2,7 @@ package implementations;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -177,16 +178,36 @@ public class ContactManagerImpl implements ContactManager{
 		return contact.getId();
 	}
 	
-	//TO-DO
+
 	@Override
 	public Set<Contact> getContacts(String name){
-		return contacts;
+		int size = contacts.size();
+		Set<Contact> filteredContacts = new HashSet<Contact>();
+		Contact[] search = (Contact[]) contacts.toArray(); 
+		for(int i = 0; i < size; i++){
+			String nameToCheck = search[i].getName();
+			if (name.contains(nameToCheck)) {
+				filteredContacts.add(search[i]);
+			}
+		}
+		return filteredContacts;
 	}
 	
-	//TO-DO
 	@Override
 	public Set<Contact> getContacts(int... ids){
-		return contacts;
+		int idsSize = ids.length;
+		int contactSize = contacts.size();
+		Set<Contact> filteredContacts = new HashSet<Contact>();
+		Contact[] search = (Contact[]) contacts.toArray(); 
+		for(int i = 0; i < idsSize; i++){
+			int toCompare = ids[i];
+			for(int j = 0; j < contactSize; j++){
+				if(search[i].getId() == toCompare){
+					filteredContacts.add(search[i]);
+				}
+			}
+		}
+		return filteredContacts;
 	}
 	
 	//TO-DO

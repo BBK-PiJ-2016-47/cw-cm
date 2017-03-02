@@ -1,3 +1,5 @@
+package implementations;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -6,7 +8,7 @@ import java.util.Set;
 import interfaces.*;
 import implementations.*;
 
-public class ContactManagerImpl implements ContactManager, Serializable {
+public class ContactManagerImpl implements ContactManager{
 	
 	private Set<Contact> contacts;
 	private Calendar date;
@@ -129,7 +131,11 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 	return pastFilteredList;
 }
 	
-	//int addNewPastMeeting(Set<Contact> contacts, Calendar date, String text);
+	//TO-DO
+	@Override
+	public int addNewPastMeeting(Set<Contact> contacts, Calendar date, String text){
+		return 5;
+	}
 	
 	
 	@Override
@@ -145,6 +151,7 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 		PastMeetingImpl pastGot = (PastMeetingImpl) got;
 		
 		pastGot.addNotes(text);
+		got = pastGot;
 		return (PastMeeting) got;
 	}
 	
@@ -158,9 +165,21 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 		return contact.getId();
 	}
 	
-	// Set<Contact> getContacts(String name);
+	//TO-DO
+	@Override
+	public Set<Contact> getContacts(String name){
+		return contacts;
+	}
 	
-	//Set<Contact> getContacts(int... ids);
+	//TO-DO
+	@Override
+	public Set<Contact> getContacts(int... ids){
+		return contacts;
+	}
 	
-	//void flush();
+	//TO-DO
+	@Override
+	public void flush() {
+		
+	}
 }

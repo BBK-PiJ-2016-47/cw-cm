@@ -492,7 +492,7 @@ public class ContactManagerImplTest {
   *
   * For getContacts(String) method
   *
-  */
+  
   
 	@Test
 	public void testGetContacts_knownContact() {
@@ -520,4 +520,26 @@ public class ContactManagerImplTest {
 		//cm.getContacts(null);
 	}
 */
+	
+	 /**
+	  *
+	  * For getContacts(int... ids) method
+	  *
+	  */
+	  
+		@Test
+		public void testGetContacts_knownContact() {
+			Set<Contact> got = cm.getContacts(1,1001);
+			assertTrue(got.size() == 2);
+		}
+		
+		@Test(expected = IllegalArgumentException.class)
+		public void testIllegalArgument_unknownContact() {     
+			Set<Contact> success = cm.getContacts(77);
+		}
+
+		@Test(expected = IllegalArgumentException.class)
+		public void testIllegalArgument_nullContact() {     
+			Set<Contact> success = cm.getContacts();
+		}
 }

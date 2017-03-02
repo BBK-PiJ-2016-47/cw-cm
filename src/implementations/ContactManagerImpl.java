@@ -17,13 +17,18 @@ public class ContactManagerImpl implements ContactManager{
 	private static int meetingCount;
 	
 	@Override
-	public int addFutureMeeting(Set<Contact>contacts, Calendar date) {
+	public int addFutureMeeting(Set<Contact> contacts, Calendar date) {
+		if (date.before(Calendar.getInstance())){
+			throw new IllegalArgumentException("Date is in the past");
+		}
+		if (contacts.isEmpty()){
+			throw new IllegalArgumentException("Contact set is empty");
+		}
 		FutureMeeting newMeeting = null;
 		try {
-			int newId = (meetingCount + 1001);
-			
-			newMeeting = new FutureMeetingImpl(newId, date, contacts);
 			meetingCount++;
+			int newId = meetingCount;
+			newMeeting = new FutureMeetingImpl(newId, date, contacts);
 			meetings.add(newMeeting);
 			
 		} catch (IllegalArgumentException e) {
@@ -111,30 +116,37 @@ public class ContactManagerImpl implements ContactManager{
 	@Override
 	public List<PastMeeting> getPastMeetingListFor(Contact contact){
 	List<PastMeeting> pastFilteredList = new ArrayList<PastMeeting>();
-	if(!contacts.contains(contact)){
-		throw new IllegalArgumentException("The contact doesn't exist!");
-	}
+		if(!contacts.contains(contact)){
+			throw new IllegalArgumentException("The contact doesn't exist!");
+		}
 
-	if(contact == null) {
-		throw new NullPointerException("The contact you've entered is null!");
-	}
-	for (int i = 0; i < meetings.size(); i++){
-		if (meetings.get(i).getDate().before(Calendar.getInstance())) {
-			Meeting past;
-			past = meetings.get(i);
-			if (past.getContacts().equals(contact)){
-				pastFilteredList.add((PastMeeting) past);
+		if(contact == null) {
+			throw new NullPointerException("The contact you've entered is null!");
+		}
+		for (int i = 0; i < meetings.size(); i++){
+			if (meetings.get(i).getDate().before(Calendar.getInstance())) {
+				Meeting past;
+				past = meetings.get(i);
+				if (past.getContacts().equals(contact)){
+					pastFilteredList.add((PastMeeting) past);
+				}
 			}
 		}
-		
+		return pastFilteredList;
 	}
-	return pastFilteredList;
-}
 	
-	//TO-DO
 	@Override
 	public int addNewPastMeeting(Set<Contact> contacts, Calendar date, String text){
-		return 5;
+		PastMeeting newPastMeeting = null;
+		try {
+			meetingCount++;
+			newPastMeeting = new PastMeetingImpl(meetingCount, date, contacts, text);
+		} catch (Exception e) {
+			System.out.println("Check those parameters you entered!");
+			e.printStackTrace();
+		}
+		int newId = newPastMeeting.getId();
+		return newId;
 	}
 	
 	

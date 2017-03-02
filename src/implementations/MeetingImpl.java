@@ -16,7 +16,7 @@ public abstract class MeetingImpl implements Meeting {
 	}
 	
 	if(contacts.isEmpty()) {
-		throw new IllegalArgumentException();
+		throw new IllegalArgumentException("No contacts!");
 	}
 	
 	if (date == null || contacts == null){

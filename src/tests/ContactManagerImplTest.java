@@ -377,18 +377,12 @@ public class ContactManagerImplTest {
   *
   * For addMeetingNotes() method
   *
+  */
   
-
-	// testing it returns a past list for current meeting
-	@Test
-	public void testAddMeetingNotes() {     
-		PastMeeting result = cm.addMeetingNotes(1001, "That was nice wasn't it");
-	}
-
-	//checking edits past meeting
 	@Test
 	public void testAddMeetingNotes_Past() {     
-		cm.addMeetingNotes(1, "That was nice wasn't it");
+		PastMeeting result = cm.addMeetingNotes(1, "That was nice wasn't it");
+		assertTrue(result.getDate().before(Calendar.getInstance()));
 	}
 
 	@Test(expected = IllegalArgumentException.class)

@@ -78,9 +78,9 @@ public class ContactManagerImplTest {
 
 
 	@Test(expected = IllegalArgumentException.class)
-	public void testIllegalArgumentFuture_noContact() {
-		Contact noLinkedContact = new ContactImpl(1, "Test", "notes");
-		cm.getFutureMeetingList(noLinkedContact);
+	public void testIllegalArgumentFuture_noContact() throws Exception {
+		Set<Contact> emptyContacts = new HashSet<Contact>();
+		cm.addFutureMeeting(emptyContacts, futureDate);
 	}
 	 
 
@@ -98,10 +98,11 @@ public class ContactManagerImplTest {
   *
   * For getPastMeeting() method
   *
-  */
+  
+  
 
 	@Test(expected = IllegalStateException.class)
-	public void testIllegalState_meetingInPast() {
+	public void testIllegalState_meetingInFuture() {
 		cm.getPastMeeting(1001);
 	}
 
@@ -124,7 +125,7 @@ public class ContactManagerImplTest {
   *
   * For getFutureMeeting() method
   *
-  */
+  
 
 
 	@Test(expected = IllegalStateException.class)
@@ -150,7 +151,7 @@ public class ContactManagerImplTest {
   *
   * For getMeeting() method
   *
-  */
+  
 
 
 	@Test
@@ -178,7 +179,7 @@ public class ContactManagerImplTest {
   *
   * For getFutureMeetingList() method
   *
-  */
+  
 
 
  	@Test
@@ -249,7 +250,7 @@ public class ContactManagerImplTest {
   *
   * For getMeetingListOn() method
   *
-  */
+  
 
 //just testing it returns a list
 	
@@ -310,7 +311,7 @@ public class ContactManagerImplTest {
   *
   * For getPastMeetingListFor() method
   *
-  */
+  
   
 
  	@Test
@@ -417,7 +418,7 @@ public class ContactManagerImplTest {
   *
   * For addMeetingNotes() method
   *
-  */
+  
   
 	@Test
 	public void testAddMeetingNotes_Past() {     
@@ -445,7 +446,7 @@ public class ContactManagerImplTest {
   *
   * For addNewContact() method
   *
-  */
+  
 
 	@Test
 	public void testAddNewContact() {
@@ -491,30 +492,32 @@ public class ContactManagerImplTest {
   *
   * For getContacts(String) method
   *
-  
+  */
   
 	@Test
 	public void testGetContacts_knownContact() {
-		cm.getContacts("//name");
-		//Expected = contacts with name in
+		Set<Contact> success = cm.getContacts("Professor X");
+		assertTrue(!success.isEmpty());
 	}
   
 	@Test
 	public void testGetContacts_noContacts() {
-		cm.getContacts("hfikb");
-		//Expected error
+		Set<Contact> success = cm.getContacts("hfikb");
+		assertTrue(success.isEmpty());
 	}
   
 	@Test
 	public void testEmptyString() {
-		cm.getContacts("");
-		//Expected = set of all current contacts
+		Set<Contact> success = cm.getContacts("");
+		int originalSize = contacts.size();
+		int compareSize = success.size();
+		assertTrue(originalSize == compareSize);
+		
 	}
-  
+  /*
 	@Test(expected = NullPointerException.class)
-	public void testNullPointer_name() {     
-		//name null, notes not
-		cm.getContacts(null);
+	public void testNullPointer_name(){     
+		//cm.getContacts(null);
 	}
 */
 }

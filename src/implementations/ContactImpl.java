@@ -12,9 +12,10 @@ public class ContactImpl implements Contact {
 			throw new IllegalArgumentException("Must be a positive non-zero integer");
 		}
 		
-		if (name == null){
-			throw new NullPointerException("Name cannot be null!");
+		if (name == null || notes == null){
+			throw new NullPointerException("Name/notes cannot be null!");
 		}
+		
 		
 		this.id = id;
 		this.name = name;

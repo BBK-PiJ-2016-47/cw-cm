@@ -12,7 +12,7 @@ public abstract class MeetingImpl implements Meeting {
 	public MeetingImpl(int id, Calendar date, Set<Contact> contacts) throws Exception{
 		
 	if (id < 1) {
-		throw new IllegalArgumentException();
+		throw new IllegalArgumentException("Your ID is less than 1!");
 	}
 	
 	if(contacts.isEmpty()) {
@@ -20,7 +20,7 @@ public abstract class MeetingImpl implements Meeting {
 	}
 	
 	if (date == null || contacts == null){
-		throw new NullPointerException();
+		throw new NullPointerException("Your date or contacts is null");
 	}
 		this.id = id;
 		this.date = date;

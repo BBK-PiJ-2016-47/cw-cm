@@ -67,12 +67,13 @@ public class ContactManagerImpl implements ContactManager{
 	@Override
 	public Meeting getMeeting(int id){
 		Meeting meetingGot = null;
+		
 		try {
-			meetingGot = meetings.get(id);
-		} catch (IllegalArgumentException e) {
-			System.out.println("Your id must be more than 1 and your contacts must exist");
-		} catch (NullPointerException e) {
-			System.out.println("Your contacts or the date must not be null");
+			int placeInArray = (id-1);
+			if (placeInArray > meetings.size()){
+				return null;
+			}
+			meetingGot = meetings.get(placeInArray);
 		} catch (Exception e) {
 			System.out.println("There is another issue (see stack trace)");
 			e.printStackTrace();
@@ -140,15 +141,22 @@ public class ContactManagerImpl implements ContactManager{
 	@Override
 	public int addNewPastMeeting(Set<Contact> contacts, Calendar date, String text){
 		PastMeeting newPastMeeting = null;
+		if (contacts.isEmpty()){
+			throw new IllegalArgumentException("Your contacts are empty!");
+		}
+		if (date.after(Calendar.getInstance())){
+			throw new IllegalArgumentException("This date is in the future!");
+		}
 		try {
 			meetingCount++;
 			newPastMeeting = new PastMeetingImpl(meetingCount, date, contacts, text);
+			meetings.add(newPastMeeting);
+			
 		} catch (Exception e) {
 			System.out.println("Check those parameters you entered!");
 			e.printStackTrace();
 		}
-		int newId = newPastMeeting.getId();
-		return newId;
+		return newPastMeeting.getId();
 	}
 	
 	
@@ -157,7 +165,7 @@ public class ContactManagerImpl implements ContactManager{
 		if (text == null){
 			throw new NullPointerException("The notes are null!");
 		}
-		Meeting got = meetings.get(id);
+		Meeting got = getPastMeeting(id);
 		if(got.getDate().after(Calendar.getInstance()) || got == null) {
 			throw new IllegalArgumentException("This is not a past meeting!");
 		}
@@ -185,10 +193,8 @@ public class ContactManagerImpl implements ContactManager{
 
 	@Override
 	public Set<Contact> getContacts(String name){
-		int size = contacts.size();
 		Set<Contact> filteredContacts = new HashSet<Contact>();
 		filteredContacts.addAll(contacts);
-		
 		Iterator<Contact> iterator = filteredContacts.iterator();
 		while (iterator.hasNext()) {
 			Contact thing = iterator.next();
@@ -204,14 +210,17 @@ public class ContactManagerImpl implements ContactManager{
 		int idsSize = ids.length;
 		int contactSize = contacts.size();
 		Set<Contact> filteredContacts = new HashSet<Contact>();
-		Contact[] search = (Contact[]) contacts.toArray(); 
+		Contact[] search = contacts.toArray(new Contact[contactSize]);
 		for(int i = 0; i < idsSize; i++){
 			int toCompare = ids[i];
 			for(int j = 0; j < contactSize; j++){
-				if(search[i].getId() == toCompare){
-					filteredContacts.add(search[i]);
+				if(search[j].getId() == toCompare){
+					filteredContacts.add(search[j]);
 				}
 			}
+		}
+		if (filteredContacts.isEmpty()){
+			throw new IllegalArgumentException("ID not found!");
 		}
 		return filteredContacts;
 	}

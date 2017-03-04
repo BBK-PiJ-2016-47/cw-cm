@@ -42,11 +42,10 @@ public class ContactManagerImplTest {
 		
 		emptyDate = new GregorianCalendar(2014,12,25);
 		pastDate = new GregorianCalendar(2016,9,20);
-		futureDate = new GregorianCalendar(2017,9,20);
+		futureDate = new GregorianCalendar(2019,9,20);
 
-		//pastMeeting = new PastMeetingImpl(1, pastDate,contacts,"Here are some notes");
-
-		cm.addNewContact("Professor X", "notes");
+		Contact profX = new ContactImpl(1, "Professor X", "Head of school");
+		contacts.add(profX);
 	}
 	
 	//method for checking meetings against each other
@@ -62,12 +61,13 @@ public class ContactManagerImplTest {
 	
 	@Test
 	public void checkAddFutureMeetingId() {
+		
 		int idToTest = 0;
-		try {
-			idToTest = cm.addFutureMeeting(contacts, futureDate);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+			try {
+				idToTest = cm.addFutureMeeting(contacts, futureDate);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		assertTrue(idToTest > 0);
 	}
 	
@@ -93,31 +93,33 @@ public class ContactManagerImplTest {
 	@Test(expected = NullPointerException.class)
 	public void testNullException_Date() throws Exception {
 		cm.addFutureMeeting(contacts, null);
-	}
+	}*/
 
 /**
   *
   * For getPastMeeting() method
   *
   
-  
-
 	@Test(expected = IllegalStateException.class)
 	public void testIllegalState_meetingInFuture() {
-		cm.getPastMeeting(1001);
+		int id = cm.addFutureMeeting(contacts, futureDate);
+		cm.getPastMeeting(id);
 	}
 
+	
 	@Test
 	public void testGetPastMeeting_noMeeting() {
-		PastMeeting getted = cm.getPastMeeting(77);
-		assertTrue(meetingEquivalence(null, getted));
+		PastMeeting getted = cm.getPastMeeting(98);
+		assertTrue(getted == null);
 	}
 
 
 	@Test
 	public void testGetPastMeeting_Meeting() {
-		PastMeeting getted = cm.getPastMeeting(1);
-		assertTrue(meetingEquivalence(pastMeeting, getted));
+		cm.addNewContact("Prof X", "notes");
+		cm.addNewPastMeeting(contacts, pastDate, "Meeting");
+		Meeting test = cm.getPastMeeting(1);
+		assertTrue(test.getId() == 1);
 	}
 
 
@@ -125,25 +127,28 @@ public class ContactManagerImplTest {
 /**
   *
   * For getFutureMeeting() method
-  *
+  */
   
 
 
 	@Test(expected = IllegalStateException.class)
 	public void testIllegalState_meetingInFuture() {
-		cm.getFutureMeeting(1);
+		int id = cm.addNewPastMeeting(contacts, pastDate, "notes");
+		cm.getFutureMeeting(id);
 	}
 
 	@Test
 	public void testGetFutureMeeting_noMeeting() {
 		FutureMeeting getted = cm.getFutureMeeting(800000);
-		assertTrue(meetingEquivalence(null, getted));
+		assertTrue(getted == null);
 	}
 
 	@Test
 	public void testGetFutureMeeting_Meeting() {
-		FutureMeeting getted = cm.getFutureMeeting(1001);
-		assertTrue(meetingEquivalence(pastMeeting, getted));
+		cm.addNewContact("Prof X", "notes");
+		int id = cm.addFutureMeeting(contacts, futureDate);
+		Meeting test = cm.getFutureMeeting(id);
+		assertTrue(test.getId() == id);
 	}
 
 
@@ -151,7 +156,7 @@ public class ContactManagerImplTest {
 /**
   *
   * For getMeeting() method
-  */
+  
   
 
 
@@ -189,9 +194,14 @@ public class ContactManagerImplTest {
  	@Test
  	public void testGetFutureMeetingList() {
  		boolean aList = true;
+ 		cm.addNewContact("Shadowcat", "don't worry about opening the door");
+        Set<Contact> shadowSet = cm.getContacts("Shadowcat");
+        cm.addFutureMeeting(shadowSet, futureDate, "here are some notes");
+ 		Iterator<Contact> it = shadowSet.iterator();
+        Contact shadowCat = it.next();
  		try {
  		
- 		List<Meeting> testFutureList = cm.getFutureMeetingList(profX);
+ 		List<Meeting> testFutureList = cm.getFutureMeetingList(shadowCat);
  		//if this assignment works then method returns a list
  		} catch (Exception e){
  			System.out.println("EXCEPTION HERE");
@@ -474,7 +484,7 @@ public class ContactManagerImplTest {
 			}
 		}
 		assertTrue(unique);
-	}*/
+	}
 
 	@Test(expected = NullPointerException.class)
 	public void testNullPointer_ContactNotes() {     
@@ -500,7 +510,7 @@ public class ContactManagerImplTest {
  /**
   *
   * For getContacts(String) method
-  */
+  
   
 	
 	@Test
@@ -530,7 +540,7 @@ public class ContactManagerImplTest {
 	 /**
 	  *
 	  * For getContacts(int... ids) method
-	  */
+	  
 	  
 	  
 		@Test
@@ -547,5 +557,5 @@ public class ContactManagerImplTest {
 		@Test(expected = IllegalArgumentException.class)
 		public void testIllegalArgument_nullContact() {     
 			Set<Contact> success = cm.getContacts();
-		}
+		}*/
 }

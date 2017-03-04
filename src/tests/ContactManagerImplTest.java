@@ -34,17 +34,21 @@ public class ContactManagerImplTest {
 	
 	@Before
 	public void setUp() throws Exception {
+		
 		emptyDate = new GregorianCalendar(2014,12,25);
 		profX = new ContactImpl(5, "Professor X", "headmaster of Xavier's school for gifted youngsters");
 		contacts = new HashSet<Contact>();
-		contacts.add(profX);
+		
 		meetings = new ArrayList<Meeting>();
 		pastDate = new GregorianCalendar(2016,9,20);
 		futureDate = new GregorianCalendar(2017,9,20);
 		cm = new ContactManagerImpl();
-		pastMeeting = new PastMeetingImpl(1, pastDate,contacts,"Here are some notes");
-		futureMeeting = new FutureMeetingImpl(1001, futureDate, contacts);
+		//pastMeeting = new PastMeetingImpl(1, pastDate,contacts,"Here are some notes");
+		//cm.addFutureMeeting(contacts, futureDate);
+		cm.addNewContact("Professor X", "notes");
+		//futureMeeting = new FutureMeetingImpl(1001, futureDate, contacts);
 		filteredList = new ArrayList<Meeting>();
+		
 		
 	}
 	
@@ -57,7 +61,7 @@ public class ContactManagerImplTest {
   *
   * For addFutureMeeting() method
   *
-  */
+  
 	
 	@Test
 	public void checkAddFutureMeetingId() {
@@ -157,14 +161,15 @@ public class ContactManagerImplTest {
 	@Test
 	public void testGetMeeting_noMeeting() {
 		Meeting test = cm.getMeeting(8000000);
-		assertTrue(meetingEquivalence(null, test));
+		Meeting nullTest = null;
+		assertTrue(meetingEquivalence(test, nullTest));
 	}
 
 	
 	@Test
 	public void testGetMeeting_pastMeeting() {
 		Meeting test = cm.getMeeting(1);
-		assertTrue(meetingEquivalence(pastMeeting, test));
+		assertTrue(pastMeeting.equals(test));
 	}
 	
 	@Test
@@ -186,9 +191,11 @@ public class ContactManagerImplTest {
  	public void testGetFutureMeetingList() {
  		boolean aList = true;
  		try {
+ 		
  		List<Meeting> testFutureList = cm.getFutureMeetingList(profX);
  		//if this assignment works then method returns a list
  		} catch (Exception e){
+ 			System.out.println("EXCEPTION HERE");
  			aList = false;
  		}
  		assertTrue(aList);
@@ -491,41 +498,43 @@ public class ContactManagerImplTest {
  /**
   *
   * For getContacts(String) method
-  *
+  */
   
-  
+	
 	@Test
 	public void testGetContacts_knownContact() {
-		Set<Contact> success = cm.getContacts("Professor X");
+		cm.addNewContact("Storm", "notes");
+		Set<Contact> success = cm.getContacts("Storm");
 		assertTrue(!success.isEmpty());
 	}
   
 	@Test
 	public void testGetContacts_noContacts() {
-		Set<Contact> success = cm.getContacts("hfikb");
+		Set<Contact> success = cm.getContacts("wrkgw");
 		assertTrue(success.isEmpty());
 	}
   
 	@Test
 	public void testEmptyString() {
+		cm.addNewContact("Storm", "notes");
 		Set<Contact> success = cm.getContacts("");
 		int originalSize = contacts.size();
 		int compareSize = success.size();
-		assertTrue(originalSize == compareSize);
+		assertTrue(compareSize == originalSize);
+		//assertTrue(!success.isEmpty());
 		
 	}
-  /*
+ 
 	@Test(expected = NullPointerException.class)
 	public void testNullPointer_name(){     
 		//cm.getContacts(null);
 	}
-*/
 	
 	 /**
 	  *
 	  * For getContacts(int... ids) method
 	  *
-	  */
+	  
 	  
 		@Test
 		public void testGetContacts_knownContact() {
@@ -541,5 +550,5 @@ public class ContactManagerImplTest {
 		@Test(expected = IllegalArgumentException.class)
 		public void testIllegalArgument_nullContact() {     
 			Set<Contact> success = cm.getContacts();
-		}
+		}*/
 }

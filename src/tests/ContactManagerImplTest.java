@@ -34,22 +34,19 @@ public class ContactManagerImplTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		
-		emptyDate = new GregorianCalendar(2014,12,25);
-		profX = new ContactImpl(5, "Professor X", "headmaster of Xavier's school for gifted youngsters");
-		contacts = new HashSet<Contact>();
-		
-		meetings = new ArrayList<Meeting>();
-		pastDate = new GregorianCalendar(2016,9,20);
-		futureDate = new GregorianCalendar(2017,9,20);
 		cm = new ContactManagerImpl();
-		//pastMeeting = new PastMeetingImpl(1, pastDate,contacts,"Here are some notes");
-		//cm.addFutureMeeting(contacts, futureDate);
-		cm.addNewContact("Professor X", "notes");
-		//futureMeeting = new FutureMeetingImpl(1001, futureDate, contacts);
+		
+		contacts = new HashSet<Contact>();
+		meetings = new ArrayList<Meeting>();
 		filteredList = new ArrayList<Meeting>();
 		
-		
+		emptyDate = new GregorianCalendar(2014,12,25);
+		pastDate = new GregorianCalendar(2016,9,20);
+		futureDate = new GregorianCalendar(2017,9,20);
+
+		//pastMeeting = new PastMeetingImpl(1, pastDate,contacts,"Here are some notes");
+
+		cm.addNewContact("Professor X", "notes");
 	}
 	
 	//method for checking meetings against each other
@@ -60,7 +57,7 @@ public class ContactManagerImplTest {
 /**
   *
   * For addFutureMeeting() method
-  *
+  
   
 	
 	@Test
@@ -154,28 +151,30 @@ public class ContactManagerImplTest {
 /**
   *
   * For getMeeting() method
-  *
+  */
   
 
 
 	@Test
 	public void testGetMeeting_noMeeting() {
 		Meeting test = cm.getMeeting(8000000);
-		Meeting nullTest = null;
-		assertTrue(meetingEquivalence(test, nullTest));
+		assertTrue(test == null);
 	}
 
 	
 	@Test
 	public void testGetMeeting_pastMeeting() {
-		Meeting test = cm.getMeeting(1);
-		assertTrue(pastMeeting.equals(test));
+		int id = cm.addNewPastMeeting(contacts, pastDate, "??");
+		Meeting test = cm.getMeeting(id);
+		assertTrue(test.getId() == id);
 	}
 	
 	@Test
 	public void testGetMeeting_futureMeeting() {
-		Meeting test = cm.getMeeting(1001);
-		assertTrue(meetingEquivalence(futureMeeting, test));
+		cm.addNewContact("Prof X", "notes");
+		cm.addFutureMeeting(contacts, futureDate);
+		Meeting test = cm.getMeeting(1);
+		assertTrue(test.getId() == 1);
 	}
 
 
@@ -388,7 +387,7 @@ public class ContactManagerImplTest {
 	public void checkAddPastMeetingId() {
 		int idToTest = 0;
 		try {
-			idToTest = cm.addNewPastMeeting(contacts, futureDate, "forgot about this one");
+			idToTest = cm.addNewPastMeeting(contacts, pastDate, "forgot about this one");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -403,7 +402,7 @@ public class ContactManagerImplTest {
 
 
 	@Test(expected = IllegalArgumentException.class)
-	public void testIllegalArgumentPast_noContact() {
+	public void testIllegalArgumentPast_noContact() throws Exception {
 		Set<Contact> emptyContacts = new HashSet<Contact>();
 		cm.addNewPastMeeting(emptyContacts, pastDate, "notes");
 	}
@@ -452,27 +451,30 @@ public class ContactManagerImplTest {
   /**
   *
   * For addNewContact() method
-  *
+  
   
 
 	@Test
 	public void testAddNewContact() {
 		cm.addNewContact("Bob", "makes a great burger");
 	}
-
+/*
 	@Test
 	public void testIDNumber() {
+		ContactManagerImpl.contactCount = 0;
+		Set<Contact> preAddContacts = contacts;
 		int idToTest = cm.addNewContact("Bob", "makes a great burger");
 		assertTrue(idToTest > 0);
+		System.out.print(idToTest);
 		boolean unique = true;
-		for(Contact contact : contacts) {
+		for(Contact contact : preAddContacts) {
 			int existingId = contact.getId();
 			if (existingId == idToTest) {
 				unique = false;
 			}
 		}
 		assertTrue(unique);
-	}
+	}*/
 
 	@Test(expected = NullPointerException.class)
 	public void testNullPointer_ContactNotes() {     
@@ -502,7 +504,7 @@ public class ContactManagerImplTest {
   
 	
 	@Test
-	public void testGetContacts_knownContact() {
+	public void testGetStringContacts_knownContact() {
 		cm.addNewContact("Storm", "notes");
 		Set<Contact> success = cm.getContacts("Storm");
 		assertTrue(!success.isEmpty());
@@ -512,34 +514,29 @@ public class ContactManagerImplTest {
 	public void testGetContacts_noContacts() {
 		Set<Contact> success = cm.getContacts("wrkgw");
 		assertTrue(success.isEmpty());
+		
 	}
   
 	@Test
 	public void testEmptyString() {
-		cm.addNewContact("Storm", "notes");
 		Set<Contact> success = cm.getContacts("");
 		int originalSize = contacts.size();
 		int compareSize = success.size();
-		assertTrue(compareSize == originalSize);
-		//assertTrue(!success.isEmpty());
-		
+		System.out.println(originalSize + compareSize);
+		assertTrue(originalSize == compareSize);
 	}
  
-	@Test(expected = NullPointerException.class)
-	public void testNullPointer_name(){     
-		//cm.getContacts(null);
-	}
 	
 	 /**
 	  *
 	  * For getContacts(int... ids) method
-	  *
+	  */
 	  
 	  
 		@Test
 		public void testGetContacts_knownContact() {
-			Set<Contact> got = cm.getContacts(1,1001);
-			assertTrue(got.size() == 2);
+			Set<Contact> got = cm.getContacts(1);
+			assertTrue(got.size() == 1);
 		}
 		
 		@Test(expected = IllegalArgumentException.class)
@@ -550,5 +547,5 @@ public class ContactManagerImplTest {
 		@Test(expected = IllegalArgumentException.class)
 		public void testIllegalArgument_nullContact() {     
 			Set<Contact> success = cm.getContacts();
-		}*/
+		}
 }

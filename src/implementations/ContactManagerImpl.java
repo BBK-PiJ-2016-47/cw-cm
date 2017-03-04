@@ -3,6 +3,7 @@ package implementations;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -11,9 +12,9 @@ import implementations.*;
 
 public class ContactManagerImpl implements ContactManager{
 	
-	private Set<Contact> contacts;
-	private Calendar date;
-	private List<Meeting> meetings = new ArrayList<Meeting>();
+	protected static Set<Contact> contacts = new HashSet<Contact>();
+	//private Calendar date;
+	protected static List<Meeting> meetings = new ArrayList<Meeting>();
 	private static int contactCount;
 	private static int meetingCount;
 	
@@ -171,6 +172,9 @@ public class ContactManagerImpl implements ContactManager{
 	
 	@Override
 	public int addNewContact(String name, String notes){
+		if (name == "" || notes == ""){
+			throw new IllegalArgumentException("Name/notes is empty!");
+		}
 		contactCount++;
 		int newId = contactCount;
 		Contact contact = new ContactImpl(newId,name, notes);
@@ -183,11 +187,13 @@ public class ContactManagerImpl implements ContactManager{
 	public Set<Contact> getContacts(String name){
 		int size = contacts.size();
 		Set<Contact> filteredContacts = new HashSet<Contact>();
-		Contact[] search = (Contact[]) contacts.toArray(); 
-		for(int i = 0; i < size; i++){
-			String nameToCheck = search[i].getName();
-			if (name.contains(nameToCheck)) {
-				filteredContacts.add(search[i]);
+		filteredContacts.addAll(contacts);
+		
+		Iterator<Contact> iterator = filteredContacts.iterator();
+		while (iterator.hasNext()) {
+			Contact thing = iterator.next();
+			if (!thing.getName().contains(name)) {
+				iterator.remove();
 			}
 		}
 		return filteredContacts;

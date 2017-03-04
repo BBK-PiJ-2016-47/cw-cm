@@ -26,6 +26,7 @@ public class ContactManagerImpl implements ContactManager{
 		if (contacts.isEmpty()){
 			throw new IllegalArgumentException("Contact set is empty");
 		}
+	
 		FutureMeeting newMeeting = null;
 		try {
 			meetingCount++;
@@ -49,17 +50,25 @@ public class ContactManagerImpl implements ContactManager{
 	@Override
 	public PastMeeting getPastMeeting(int id){
 		Meeting past = getMeeting(id);
-		if (past.getDate().after(Calendar.getInstance())) {
-			throw new IllegalArgumentException("This date is in the future!");
+		if (past == null){
+			return null;
 		}
+		if (past.getDate().after(Calendar.getInstance())) {
+			System.out.println("We are at future exception");
+			throw new IllegalStateException("This date is in the future!");
+		}
+		
 		return (PastMeeting) past;
 	}
 	
 	@Override
 	public FutureMeeting getFutureMeeting(int id){
 		Meeting future = getMeeting(id);
+		if (future == null){
+			return null;
+		}
 		if (future.getDate().before(Calendar.getInstance())) {
-			throw new IllegalArgumentException("This date is in the past!");
+			throw new IllegalStateException("This date is in the past!");
 		}
 		return (FutureMeeting) future;
 	}
@@ -84,22 +93,28 @@ public class ContactManagerImpl implements ContactManager{
 	@Override
 	public List<Meeting> getFutureMeetingList(Contact contact) {
     	List<Meeting> filteredList = new ArrayList<Meeting>();
+    	if(contact == null) {
+    		throw new NullPointerException("The contact you've entered is null!");
+    	}
     	if(!contacts.contains(contact)){
     		throw new IllegalArgumentException("The contact doesn't exist!");
     	}
 
-    	if(contact == null) {
-    		throw new NullPointerException("The contact you've entered is null!");
+    	//getting list of future meetings
+    	List <Meeting> futureMeetings = new ArrayList<Meeting>();
+    	for(int i = 0; i < meetings.size(); i++){
+    		if (meetings.get(i).getDate().after(Calendar.getInstance())) {
+        			futureMeetings.add(meetings.get(i));
+    		}
     	}
-    	for (int i = 0; i < meetings.size(); i++){
-			if (meetings.get(i).getDate().after(Calendar.getInstance())) {
-				Meeting future;
-				future = meetings.get(i);
-				if (future.getContacts().equals(contact)){
-					filteredList.add(future);
-				}
-			}
-			
+    	
+    	for(int i = 0; i < futureMeetings.size();i++){
+    		Set <Contact> tempSet = futureMeetings.get(i).getContacts();
+    		Iterator<Contact> it = tempSet.iterator();
+    		if (it.next().equals(contact)){
+    			filteredList.add(futureMeetings.get(i));
+    		}
+
     	}
     	return filteredList;
     }
@@ -118,24 +133,31 @@ public class ContactManagerImpl implements ContactManager{
 	
 	@Override
 	public List<PastMeeting> getPastMeetingListFor(Contact contact){
-	List<PastMeeting> pastFilteredList = new ArrayList<PastMeeting>();
-		if(!contacts.contains(contact)){
-			throw new IllegalArgumentException("The contact doesn't exist!");
-		}
-
+		List<PastMeeting> pastFilteredList = new ArrayList<PastMeeting>();
 		if(contact == null) {
 			throw new NullPointerException("The contact you've entered is null!");
 		}
-		for (int i = 0; i < meetings.size(); i++){
-			if (meetings.get(i).getDate().before(Calendar.getInstance())) {
-				Meeting past;
-				past = meetings.get(i);
-				if (past.getContacts().equals(contact)){
-					pastFilteredList.add((PastMeeting) past);
-				}
-			}
+		if(!contacts.contains(contact)){
+			throw new IllegalArgumentException("The contact doesn't exist!");
 		}
-		return pastFilteredList;
+		
+    	//getting list of past meetings
+    	List <Meeting> pastMeetings = new ArrayList<Meeting>();
+    	for(int i = 0; i < meetings.size(); i++){
+    		if (meetings.get(i).getDate().before(Calendar.getInstance())) {
+    			pastMeetings.add(meetings.get(i));
+    		}
+    	}
+    	
+    	for(int i = 0; i < pastMeetings.size();i++){
+    		Set <Contact> tempSet = pastMeetings.get(i).getContacts();
+    		Iterator<Contact> it = tempSet.iterator();
+    		if (it.next().equals(contact)){
+    			pastFilteredList.add((PastMeeting) pastMeetings.get(i));
+    		}
+
+    	}
+    	return pastFilteredList;
 	}
 	
 	@Override
@@ -164,6 +186,9 @@ public class ContactManagerImpl implements ContactManager{
 	public PastMeeting addMeetingNotes(int id, String text){
 		if (text == null){
 			throw new NullPointerException("The notes are null!");
+		}
+		if (id > meetingCount){
+			throw new IllegalArgumentException("The meeting does not exist");
 		}
 		Meeting got = getPastMeeting(id);
 		if(got.getDate().after(Calendar.getInstance()) || got == null) {

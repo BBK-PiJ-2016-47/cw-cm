@@ -14,6 +14,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -56,7 +57,7 @@ public class ContactManagerImplTest {
 /**
   *
   * For addFutureMeeting() method
-  
+  */
   
 	
 	@Test
@@ -93,12 +94,12 @@ public class ContactManagerImplTest {
 	@Test(expected = NullPointerException.class)
 	public void testNullException_Date() throws Exception {
 		cm.addFutureMeeting(contacts, null);
-	}*/
+	}
 
 /**
   *
   * For getPastMeeting() method
-  *
+  */
   
 	@Test(expected = IllegalStateException.class)
 	public void testIllegalState_meetingInFuture() {
@@ -117,9 +118,9 @@ public class ContactManagerImplTest {
 	@Test
 	public void testGetPastMeeting_Meeting() {
 		cm.addNewContact("Prof X", "notes");
-		cm.addNewPastMeeting(contacts, pastDate, "Meeting");
-		Meeting test = cm.getPastMeeting(1);
-		assertTrue(test.getId() == 1);
+		int id = cm.addNewPastMeeting(contacts, pastDate, "Meeting");
+		Meeting test = cm.getPastMeeting(id);
+		assertTrue(test.getId() == id);
 	}
 
 
@@ -127,12 +128,13 @@ public class ContactManagerImplTest {
 /**
   *
   * For getFutureMeeting() method
+  *
   */
   
 
 
 	@Test(expected = IllegalStateException.class)
-	public void testIllegalState_meetingInFuture() {
+	public void testGetFutureIllegalState_meetingInFuture() {
 		int id = cm.addNewPastMeeting(contacts, pastDate, "notes");
 		cm.getFutureMeeting(id);
 	}
@@ -156,7 +158,8 @@ public class ContactManagerImplTest {
 /**
   *
   * For getMeeting() method
-  
+  *
+  */
   
 
 
@@ -188,7 +191,7 @@ public class ContactManagerImplTest {
   *
   * For getFutureMeetingList() method
   *
-  
+  *
 
 
  	@Test
@@ -196,7 +199,7 @@ public class ContactManagerImplTest {
  		boolean aList = true;
  		cm.addNewContact("Shadowcat", "don't worry about opening the door");
         Set<Contact> shadowSet = cm.getContacts("Shadowcat");
-        cm.addFutureMeeting(shadowSet, futureDate, "here are some notes");
+        cm.addFutureMeeting(shadowSet, futureDate);
  		Iterator<Contact> it = shadowSet.iterator();
         Contact shadowCat = it.next();
  		try {
@@ -390,7 +393,7 @@ public class ContactManagerImplTest {
 		
 		assertFalse(duplicate);
 	}
-	
+	*/
 	//addNewPastMeeting()
 	
 	@Test
@@ -433,12 +436,13 @@ public class ContactManagerImplTest {
   /**
   *
   * For addMeetingNotes() method
-  *
+  */
   
   
 	@Test
-	public void testAddMeetingNotes_Past() {     
-		PastMeeting result = cm.addMeetingNotes(1, "That was nice wasn't it");
+	public void testAddMeetingNotes_Past() { 
+		int id = cm.addNewPastMeeting(contacts, pastDate, "some notes");
+		PastMeeting result = cm.addMeetingNotes(id, "That was nice wasn't it");
 		assertTrue(result.getDate().before(Calendar.getInstance()));
 	}
 
@@ -448,8 +452,9 @@ public class ContactManagerImplTest {
 	}
 
 	@Test(expected = IllegalStateException.class)
-	public void testIllegalState_futureMeeting() throws Exception {     
-		cm.addMeetingNotes(1001, "That was nice wasn't it");;
+	public void testIllegalState_futureMeeting() throws Exception {  
+		int id = cm.addFutureMeeting(contacts, futureDate);
+		cm.addMeetingNotes(id, "That was nice wasn't it");;
 	}
 
 	@Test(expected = NullPointerException.class)
@@ -461,17 +466,16 @@ public class ContactManagerImplTest {
   /**
   *
   * For addNewContact() method
-  
+  */
   
 
 	@Test
 	public void testAddNewContact() {
 		cm.addNewContact("Bob", "makes a great burger");
 	}
-/*
+
 	@Test
 	public void testIDNumber() {
-		ContactManagerImpl.contactCount = 0;
 		Set<Contact> preAddContacts = contacts;
 		int idToTest = cm.addNewContact("Bob", "makes a great burger");
 		assertTrue(idToTest > 0);
@@ -510,7 +514,7 @@ public class ContactManagerImplTest {
  /**
   *
   * For getContacts(String) method
-  
+  */
   
 	
 	@Test
@@ -524,15 +528,15 @@ public class ContactManagerImplTest {
 	public void testGetContacts_noContacts() {
 		Set<Contact> success = cm.getContacts("wrkgw");
 		assertTrue(success.isEmpty());
-		
 	}
   
 	@Test
 	public void testEmptyString() {
-		Set<Contact> success = cm.getContacts("");
-		int originalSize = contacts.size();
-		int compareSize = success.size();
-		System.out.println(originalSize + compareSize);
+		ContactManager twats = new ContactManagerImpl();
+		twats.addNewContact("Iceman", "Bring a coat");
+		Set<Contact> newSet = twats.getContacts("");
+		int originalSize = twats.getContacts("").size();
+		int compareSize = newSet.size();
 		assertTrue(originalSize == compareSize);
 	}
  

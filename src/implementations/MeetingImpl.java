@@ -2,9 +2,14 @@ package implementations;
 
 import interfaces.Contact;
 import interfaces.Meeting;
+
+import java.io.Serializable;
 import java.util.*;
 
-public abstract class MeetingImpl implements Meeting {
+public abstract class MeetingImpl implements Meeting, Serializable {
+
+
+	private static final long serialVersionUID = 1L;
 	private int id;
 	private Calendar date;
 	private Set<Contact> contacts;

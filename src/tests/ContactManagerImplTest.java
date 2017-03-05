@@ -191,7 +191,7 @@ public class ContactManagerImplTest {
   *
   * For getFutureMeetingList() method
   *
-  *
+  */
 
 
  	@Test
@@ -226,9 +226,13 @@ public class ContactManagerImplTest {
 	}
 
 	@Test
-	public void testGetFutureMeetingList_Empty() {
-		Contact cyclops = new ContactImpl(2, "Cyclops", "don't let him take off his glasses");
-		contacts.add(cyclops);
+	public void testGetFutureMeetingList_Empty() {		
+		cm.addNewContact("Cyclops", "don't let him take off his glasses");
+        Set<Contact> cyclopsSet = cm.getContacts("Cyclops");
+ 		Iterator<Contact> it = cyclopsSet.iterator();
+        Contact cyclops = it.next();
+
+
 		List<Meeting> cyclopsMeetings = cm.getFutureMeetingList(cyclops);
 		assertTrue(cyclopsMeetings.isEmpty());
 	}
@@ -269,6 +273,7 @@ public class ContactManagerImplTest {
   *
   * For getMeetingListOn() method
   *
+  */
   
 
 //just testing it returns a list
@@ -322,24 +327,32 @@ public class ContactManagerImplTest {
 
 	
 	@Test(expected = NullPointerException.class)
-	public void testNullPointer() {     
-		cm.getMeetingListOn(null);
+	public void testNullPointer() {
+		Calendar nullDate = null;
+		cm.getMeetingListOn(nullDate);
 	}
 
   /**
   *
   * For getPastMeetingListFor() method
   *
-  
+  */
   
 
  	@Test
  	public void testGetPastMeetingListFor() {
  		boolean aList = true;
+ 		cm.addNewContact("Shadowcat", "don't worry about opening the door");
+        Set<Contact> shadowSet = cm.getContacts("Shadowcat");
+        cm.addNewPastMeeting(shadowSet, pastDate, "notes");
+ 		Iterator<Contact> it = shadowSet.iterator();
+        Contact shadowCat = it.next();
  		try {
- 		List<PastMeeting> testPastList = cm.getPastMeetingListFor(profX);
+ 		
+ 		List<PastMeeting> testPastList = cm.getPastMeetingListFor(shadowCat);
  		//if this assignment works then method returns a list
  		} catch (Exception e){
+ 			System.out.println("EXCEPTION HERE");
  			aList = false;
  		}
  		assertTrue(aList);
@@ -359,9 +372,13 @@ public class ContactManagerImplTest {
 
 	@Test
 	public void testGetPastMeetingListFor_Empty() {
-		Contact cyclops = new ContactImpl(2, "Cyclops", "don't let him take off his glasses");
-		contacts.add(cyclops);
-		cm.getPastMeetingListFor(cyclops);
+		cm.addNewContact("Cyclops", "don't let him take off his glasses");
+        Set<Contact> cyclopsSet = cm.getContacts("Cyclops");
+ 		Iterator<Contact> it = cyclopsSet.iterator();
+        Contact cyclops = it.next();
+
+		List<PastMeeting> cyclopsPastMeetings = cm.getPastMeetingListFor(cyclops);
+		assertTrue(cyclopsPastMeetings.isEmpty());
 	}
 
 	
@@ -393,7 +410,7 @@ public class ContactManagerImplTest {
 		
 		assertFalse(duplicate);
 	}
-	*/
+	
 	//addNewPastMeeting()
 	
 	@Test
@@ -532,10 +549,10 @@ public class ContactManagerImplTest {
   
 	@Test
 	public void testEmptyString() {
-		ContactManager twats = new ContactManagerImpl();
-		twats.addNewContact("Iceman", "Bring a coat");
-		Set<Contact> newSet = twats.getContacts("");
-		int originalSize = twats.getContacts("").size();
+		ContactManager cMa = new ContactManagerImpl();
+		cMa.addNewContact("Iceman", "Bring a coat");
+		Set<Contact> newSet = cMa.getContacts("");
+		int originalSize = cMa.getContacts("").size();
 		int compareSize = newSet.size();
 		assertTrue(originalSize == compareSize);
 	}

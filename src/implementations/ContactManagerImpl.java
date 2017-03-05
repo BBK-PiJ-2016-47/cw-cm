@@ -2,10 +2,12 @@ package implementations;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -22,10 +24,25 @@ import interfaces.*;
 public class ContactManagerImpl implements ContactManager{
 	
 	protected static Set<Contact> contacts = new HashSet<Contact>();
-	//private Calendar date;
 	protected static List<Meeting> meetings = new ArrayList<Meeting>();
 	private static int contactCount;
 	private static int meetingCount;
+	
+	@SuppressWarnings("unchecked")
+	public void load(){
+		try(FileInputStream fi = new FileInputStream("contacts.txt")){
+			ObjectInputStream os = new ObjectInputStream(fi);
+			//contacts = (HashSet<Contact>) os.readObject();
+			meetings = (List<Meeting>) os.readObject();
+			os.close();
+		} catch (FileNotFoundException e) {
+			System.out.println("Contacts file wasn't found!");
+		} catch (IOException e) {
+			System.out.println("Couldn't read from this file!");
+		} catch (ClassNotFoundException e) {
+			System.out.println("Couldn't find the right class!");
+		}
+	}
 	
 	@Override
 	public int addFutureMeeting(Set<Contact> contacts, Calendar date) {
@@ -240,6 +257,7 @@ public class ContactManagerImpl implements ContactManager{
 
 	@Override
 	public Set<Contact> getContacts(String name){
+		load();
 		Set<Contact> filteredContacts = new HashSet<Contact>();
 		filteredContacts.addAll(contacts);
 		Iterator<Contact> iterator = filteredContacts.iterator();
@@ -312,7 +330,8 @@ public class ContactManagerImpl implements ContactManager{
 	    for (Contact contact : contacts)
 	        pw.println(contact.toString());
 	    System.out.println("Saving contact");
-	    pw.close();*/
+	    pw.close();
+	    *//*
 		File file = new File("contacts.txt");
 	    
 		try (PrintWriter pw = new PrintWriter(new FileOutputStream(file))){
@@ -322,7 +341,21 @@ public class ContactManagerImpl implements ContactManager{
 		} catch (FileNotFoundException e) {
 			System.out.println("Contacts.txt wasn't found!");
 		}
+*/
+		try(FileOutputStream fs = new FileOutputStream("contacts.txt")) {
+			
+			ObjectOutputStream os = new ObjectOutputStream(fs);
+			//os.writeObject(contacts);
+		    
+			os.writeObject(meetings);
+		    os.close();
+		    
 
+		} catch (FileNotFoundException e) {
+			System.out.println("File wasn't found!");
+		} catch (IOException e) {
+			System.out.println("Couldn't write to file!");
+		}
 	 
 		
 	}

@@ -1,14 +1,23 @@
 package implementations;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import interfaces.*;
-import implementations.*;
 
 public class ContactManagerImpl implements ContactManager{
 	
@@ -116,11 +125,24 @@ public class ContactManagerImpl implements ContactManager{
     		}
 
     	}
+    	//Will this sort the list?
+    	Collections.sort(filteredList, new Comparator<Meeting>() {
+    	    public int compare(Meeting m1, Meeting m2) {
+    	        return m1.getDate().compareTo(m2.getDate());
+    	    }
+    	});
     	return filteredList;
     }
 	
+
+	
+
+	
 	@Override
 	public List<Meeting> getMeetingListOn(Calendar date){
+    	if (date == null){
+    		throw new NullPointerException("The date you entered was null!");
+    	}
     	List<Meeting> filteredList = new ArrayList<Meeting>();
     	for (int i = 0; i < meetings.size(); i++){
 			if (meetings.get(i).getDate().equals(date)) {
@@ -253,6 +275,70 @@ public class ContactManagerImpl implements ContactManager{
 	//TO-DO
 	@Override
 	public void flush() {
+		/*
+		FileOutputStream fos = null;
+		try {
+			fos = new FileOutputStream("contacts.txt");
+		} catch (FileNotFoundException e1) {
+			System.out.println("Contacts.txt wasn't found!");
+		}
+		ObjectOutputStream oos;
+
+		try {
+			oos = new ObjectOutputStream(fos);
+			oos.writeObject(contacts);
+			System.out.println("Just about to close flush");
+			oos.close();
+			
+		} catch (IOException e) {
+			System.out.println("Couldn't write contacts to contacts.txt");
+		
+		
+		 File file = new File("contacts.txt");
+		 try (BufferedWriter br = new BufferedWriter(new FileWriter(file))){
+		  	br.write("This is line one");
+		  	System.out.println("This should do it");
+		  } catch (IOException e) {
+		  	System.out.println("Unable to write on file!");
+		  }
+		
+		File file = new File("contacts.txt");
+	    PrintWriter pw = null;
+		try {
+			pw = new PrintWriter(new FileOutputStream(file));
+		} catch (FileNotFoundException e) {
+			System.out.println("Contacts.txt wasn't found!");
+		}
+	    for (Contact contact : contacts)
+	        pw.println(contact.toString());
+	    System.out.println("Saving contact");
+	    pw.close();*/
+		File file = new File("contacts.txt");
+	    
+		try (PrintWriter pw = new PrintWriter(new FileOutputStream(file))){
+		    for (Contact contact : contacts)
+		        pw.println(contact.toString());
+		    System.out.println("Saving contact");
+		} catch (FileNotFoundException e) {
+			System.out.println("Contacts.txt wasn't found!");
+		}
+
+	 
 		
 	}
+	/*
+	 * File file = new file("contacts.txt");
+	 * try (BufferedWriter br = new BufferedWriter(new FileWriter(file))){
+	 * 	br.write("This is line one");
+	 * } catch (IOException e) {
+	 * 	System.out.println("Unable to write on file!");
+	 * }
+	 */
+	/*public void save(File fileName) throws FileNotFoundException {
+	    PrintWriter pw = new PrintWriter(new FileOutputStream(fileName));
+	    for (Contact contact : contacts)
+	        pw.println(contact.toString());
+	    System.out.println("Saving contact");
+	    pw.close();
+	}*/
 }

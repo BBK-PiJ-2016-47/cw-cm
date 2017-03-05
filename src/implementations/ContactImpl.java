@@ -1,8 +1,14 @@
 package implementations;
 
+import java.io.Serializable;
+
 import interfaces.Contact;
 
-public class ContactImpl implements Contact {
+public class ContactImpl implements Contact, Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int id;
 	private String name;
 	private String notes;
@@ -45,6 +51,11 @@ public class ContactImpl implements Contact {
 	@Override
 	public void addNotes(String note) {
 		this.notes += "; " + note;
+	}
+	
+	public String toString(){
+		return "Contact [Id: " + id + "; Name: " + name + "; Notes: " + notes + "]";
+		
 	}
 
 }

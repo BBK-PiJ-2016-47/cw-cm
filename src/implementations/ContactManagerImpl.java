@@ -1,6 +1,6 @@
 package implementations;
 
-import java.io.BufferedWriter;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -22,28 +22,44 @@ import java.util.Set;
 import interfaces.*;
 
 public class ContactManagerImpl implements ContactManager{
+	//DON'T FORGET ABOUT GRADLE
 	
 	protected static Set<Contact> contacts = new HashSet<Contact>();
 	protected static List<Meeting> meetings = new ArrayList<Meeting>();
 	private static int contactCount;
 	private static int meetingCount;
 	
+	/*
+	 * adding constructor so can load contacts.txt on opening
+	 */
+	public ContactManagerImpl(){
+		load();
+	}
+	
+	/*
+	 * method to load contacts.txt into Contact Manager
+	 */
 	@SuppressWarnings("unchecked")
-	public void load(){
+	private void load(){
 		try(FileInputStream fi = new FileInputStream("contacts.txt")){
 			ObjectInputStream os = new ObjectInputStream(fi);
-			//contacts = (HashSet<Contact>) os.readObject();
+			contacts = (HashSet<Contact>) os.readObject();
 			meetings = (List<Meeting>) os.readObject();
 			os.close();
 		} catch (FileNotFoundException e) {
-			System.out.println("Contacts file wasn't found!");
+			System.out.println("New contacts file being made");
 		} catch (IOException e) {
 			System.out.println("Couldn't read from this file!");
 		} catch (ClassNotFoundException e) {
 			System.out.println("Couldn't find the right class!");
 		}
+		
+		contactCount = (contacts.size());
+		meetingCount = (meetings.size());
 	}
-	
+	/*
+	 * @see interfaces.ContactManager#addFutureMeeting(java.util.Set, java.util.Calendar)
+	 */
 	@Override
 	public int addFutureMeeting(Set<Contact> contacts, Calendar date) {
 		if (date.before(Calendar.getInstance())){
@@ -53,6 +69,7 @@ public class ContactManagerImpl implements ContactManager{
 			throw new IllegalArgumentException("Contact set is empty");
 		}
 	
+		
 		FutureMeeting newMeeting = null;
 		try {
 			meetingCount++;
@@ -72,6 +89,9 @@ public class ContactManagerImpl implements ContactManager{
 
 	}
 	 
+	/*
+	 * @see interfaces.ContactManager#getPastMeeting(int)
+	 */
 
 	@Override
 	public PastMeeting getPastMeeting(int id){
@@ -79,13 +99,17 @@ public class ContactManagerImpl implements ContactManager{
 		if (past == null){
 			return null;
 		}
+		//confirming meeting is in the past
 		if (past.getDate().after(Calendar.getInstance())) {
-			System.out.println("We are at future exception");
 			throw new IllegalStateException("This date is in the future!");
 		}
 		
 		return (PastMeeting) past;
 	}
+	
+	/*
+	 * @see interfaces.ContactManager#getFutureMeeting(int)
+	 */
 	
 	@Override
 	public FutureMeeting getFutureMeeting(int id){
@@ -93,17 +117,24 @@ public class ContactManagerImpl implements ContactManager{
 		if (future == null){
 			return null;
 		}
+		//confirming meeting is in the future
 		if (future.getDate().before(Calendar.getInstance())) {
 			throw new IllegalStateException("This date is in the past!");
 		}
 		return (FutureMeeting) future;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see interfaces.ContactManager#getMeeting(int)
+	 */
+	
 	@Override
 	public Meeting getMeeting(int id){
 		Meeting meetingGot = null;
 		
 		try {
+			//id number is one more than array index so ids are > 1
 			int placeInArray = (id-1);
 			if (placeInArray > meetings.size()){
 				return null;
@@ -116,6 +147,10 @@ public class ContactManagerImpl implements ContactManager{
 		return meetingGot;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see interfaces.ContactManager#getFutureMeetingList(interfaces.Contact)
+	 */
 	@Override
 	public List<Meeting> getFutureMeetingList(Contact contact) {
     	List<Meeting> filteredList = new ArrayList<Meeting>();
@@ -133,7 +168,7 @@ public class ContactManagerImpl implements ContactManager{
         			futureMeetings.add(meetings.get(i));
     		}
     	}
-    	
+    	//iterating through list of future meetings to get meetings with relevant contacts
     	for(int i = 0; i < futureMeetings.size();i++){
     		Set <Contact> tempSet = futureMeetings.get(i).getContacts();
     		Iterator<Contact> it = tempSet.iterator();
@@ -153,7 +188,10 @@ public class ContactManagerImpl implements ContactManager{
 	
 
 	
-
+/*
+ * (non-Javadoc)
+ * @see interfaces.ContactManager#getMeetingListOn(java.util.Calendar)
+ */
 	
 	@Override
 	public List<Meeting> getMeetingListOn(Calendar date){
@@ -169,6 +207,11 @@ public class ContactManagerImpl implements ContactManager{
 			}
     	return filteredList;
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see interfaces.ContactManager#getPastMeetingListFor(interfaces.Contact)
+	 */
 	
 	@Override
 	public List<PastMeeting> getPastMeetingListFor(Contact contact){
@@ -187,7 +230,7 @@ public class ContactManagerImpl implements ContactManager{
     			pastMeetings.add(meetings.get(i));
     		}
     	}
-    	
+    	//iterating through to find past meetings with relevant contact
     	for(int i = 0; i < pastMeetings.size();i++){
     		Set <Contact> tempSet = pastMeetings.get(i).getContacts();
     		Iterator<Contact> it = tempSet.iterator();
@@ -198,6 +241,11 @@ public class ContactManagerImpl implements ContactManager{
     	}
     	return pastFilteredList;
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see interfaces.ContactManager#addNewPastMeeting(java.util.Set, java.util.Calendar, java.lang.String)
+	 */
 	
 	@Override
 	public int addNewPastMeeting(Set<Contact> contacts, Calendar date, String text){
@@ -235,13 +283,15 @@ public class ContactManagerImpl implements ContactManager{
 		}
 		 
 		PastMeetingImpl pastGot = (PastMeetingImpl) got;
-		
 		pastGot.addNotes(text);
 		got = pastGot;
 		return (PastMeeting) got;
 	}
 	
-	
+	/*
+	 * (non-Javadoc)
+	 * @see interfaces.ContactManager#addNewContact(java.lang.String, java.lang.String)
+	 */
 	@Override
 	public int addNewContact(String name, String notes){
 		if (name == "" || notes == ""){
@@ -254,10 +304,13 @@ public class ContactManagerImpl implements ContactManager{
 		return contact.getId();
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see interfaces.ContactManager#getContacts(java.lang.String)
+	 */
 
 	@Override
 	public Set<Contact> getContacts(String name){
-		load();
 		Set<Contact> filteredContacts = new HashSet<Contact>();
 		filteredContacts.addAll(contacts);
 		Iterator<Contact> iterator = filteredContacts.iterator();
@@ -270,11 +323,16 @@ public class ContactManagerImpl implements ContactManager{
 		return filteredContacts;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see interfaces.ContactManager#getContacts(int[])
+	 */
 	@Override
 	public Set<Contact> getContacts(int... ids){
 		int idsSize = ids.length;
 		int contactSize = contacts.size();
 		Set<Contact> filteredContacts = new HashSet<Contact>();
+		//turning into array to search more accurately
 		Contact[] search = contacts.toArray(new Contact[contactSize]);
 		for(int i = 0; i < idsSize; i++){
 			int toCompare = ids[i];
@@ -345,7 +403,7 @@ public class ContactManagerImpl implements ContactManager{
 		try(FileOutputStream fs = new FileOutputStream("contacts.txt")) {
 			
 			ObjectOutputStream os = new ObjectOutputStream(fs);
-			//os.writeObject(contacts);
+			os.writeObject(contacts);
 		    
 			os.writeObject(meetings);
 		    os.close();

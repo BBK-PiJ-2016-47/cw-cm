@@ -1,9 +1,11 @@
 package tests;
+import implementations.ContactImpl;
 import interfaces.Contact;
+
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import implementations.ContactImpl;
+
 
 public class ContactImplTest {
 	private Contact test;

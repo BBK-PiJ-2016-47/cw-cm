@@ -28,10 +28,10 @@ public class ContactImplTest {
     	assertTrue(output.equals(""));
     	test.addNotes("Can be challenging");
     	output = test.getNotes();
-    	assertTrue(output.equals(", Can be challenging"));
+    	assertTrue(output.equals("; Can be challenging"));
     	test.addNotes("has good hair");
     	output = test.getNotes();
-    	assertTrue(output.equals(", Can be challenging, has good hair"));
+    	assertTrue(output.equals("; Can be challenging; has good hair"));
     	
     }
 

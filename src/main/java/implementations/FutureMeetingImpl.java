@@ -1,10 +1,10 @@
-package implementations;
+package main.java.implementations;
 
 import java.util.Calendar;
 import java.util.Set;
 
-import interfaces.Contact;
-import interfaces.FutureMeeting;
+import main.java.spec.Contact;
+import main.java.spec.FutureMeeting;
 
 public class FutureMeetingImpl extends MeetingImpl implements FutureMeeting{	
 

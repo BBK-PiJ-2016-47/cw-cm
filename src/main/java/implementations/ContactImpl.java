@@ -1,13 +1,11 @@
-package implementations;
+package main.java.implementations;
 
 import java.io.Serializable;
 
-import interfaces.Contact;
+import main.java.spec.Contact;
 
 public class ContactImpl implements Contact, Serializable {
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 	private int id;
 	private String name;

@@ -1,21 +1,17 @@
-package implementations;
+package main.java.implementations;
 
-import interfaces.Contact;
-import interfaces.PastMeeting;
+import main.java.spec.Contact;
+import main.java.spec.PastMeeting;
 
 import java.util.*;
 
 public class PastMeetingImpl extends MeetingImpl implements PastMeeting{
-	//private int id;
-	//private Calendar date;
-	//private Set<Contact> contacts;
+
+	private static final long serialVersionUID = -92033211010420020L;
 	private String notes;
 	
 	public PastMeetingImpl(int id, Calendar date, Set<Contact> contacts, String notes) throws Exception{
 		super(id,date,contacts);
-		//this.id = id;
-		//this.date = date;
-		//this.contacts = contacts;
 		this.notes = notes;
 	}
 	

@@ -1,8 +1,5 @@
-package implementations;
-import interfaces.Contact;
-import interfaces.ContactManager;
-import interfaces.Meeting;
-import interfaces.PastMeeting;
+package main.java.implementations;
+import main.java.spec.*;
 
 import java.io.File;
 import java.util.*;
@@ -11,14 +8,14 @@ public class MainScript {
 	public static void main(String[] args) throws Exception{
 
 		ContactManager cm = new ContactManagerImpl();
-		Calendar emptyDate = new GregorianCalendar(2014,12,25);
+		Calendar emptyDate = new GregorianCalendar(2014,11,25);
 		Calendar pastDate = new GregorianCalendar(2016,9,20);
 		Calendar futureDate = new GregorianCalendar(2017,9,20);
 		Set<Contact> contacts = ContactManagerImpl.contacts;
 		List<Meeting> meetings = ContactManagerImpl.meetings;
 		List<Meeting> filteredList = new ArrayList<Meeting>();
 		
-		/*
+		
 		//Meeting pastMeeting = new PastMeetingImpl(1, pastDate,contacts,"Here are some notes");
 		//Meeting futureMeeting = new FutureMeetingImpl(1001, futureDate, contacts);
 	
@@ -102,23 +99,6 @@ public class MainScript {
 		}
 		
 		cm.flush();
-		
-*/
-		System.out.println(cm.addNewContact("Storm", "don't do weather small talk"));
-		System.out.println(cm.addNewContact("Professor X", "headmaster of Xavier's school for gifted youngsters"));
-		System.out.println(cm.addNewContact("Rogue", "make sure she's wearing gloves"));
-		System.out.println(cm.addFutureMeeting(contacts, futureDate));
-		
-		System.out.println(cm.getFutureMeeting(1).getId());
-		cm.flush();
-		
-		ContactManager newCm = new ContactManagerImpl();
-	
-		
-		System.out.println(newCm.getContacts(""));
-		System.out.println(newCm.addNewContact("Gambit", "he's a betting man"));
-		System.out.println(newCm.getContacts(""));
-		//System.out.println(newCm.getMeeting(1).getId());
-		System.out.println(newCm.getFutureMeeting(1).getId());
+
 	}
 }

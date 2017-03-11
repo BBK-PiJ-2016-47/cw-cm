@@ -1,7 +1,7 @@
-package implementations;
+package main.java.implementations;
 
-import interfaces.Contact;
-import interfaces.Meeting;
+import main.java.spec.Contact;
+import main.java.spec.Meeting;
 
 import java.io.Serializable;
 import java.util.*;
@@ -24,7 +24,7 @@ public abstract class MeetingImpl implements Meeting, Serializable {
 		throw new IllegalArgumentException("No contacts!");
 	}
 	
-	if (date == null || contacts == null){
+	if (date == null){
 		throw new NullPointerException("Your date or contacts is null");
 	}
 		this.id = id;

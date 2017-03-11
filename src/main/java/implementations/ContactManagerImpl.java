@@ -1,15 +1,12 @@
-package implementations;
+package main.java.implementations;
 
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -19,11 +16,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import interfaces.*;
+import main.java.spec.*;
 
 public class ContactManagerImpl implements ContactManager{
-	//DON'T FORGET ABOUT GRADLE
-	
+
 	protected static Set<Contact> contacts = new HashSet<Contact>();
 	protected static List<Meeting> meetings = new ArrayList<Meeting>();
 	private static int contactCount;
@@ -47,7 +43,7 @@ public class ContactManagerImpl implements ContactManager{
 			meetings = (List<Meeting>) os.readObject();
 			os.close();
 		} catch (FileNotFoundException e) {
-			System.out.println("New contacts file being made");
+			System.out.println("No saved file: New contacts file being made");
 		} catch (IOException e) {
 			System.out.println("Couldn't read from this file!");
 		} catch (ClassNotFoundException e) {
@@ -85,7 +81,8 @@ public class ContactManagerImpl implements ContactManager{
 			System.out.println("Something else went wrong, see stack trace");
 			e.printStackTrace();
 		}
-		return newMeeting.getId();
+		int futureId = newMeeting.getId();
+		return futureId;
 
 	}
 	 
@@ -99,7 +96,6 @@ public class ContactManagerImpl implements ContactManager{
 		if (past == null){
 			return null;
 		}
-		//confirming meeting is in the past
 		if (past.getDate().after(Calendar.getInstance())) {
 			throw new IllegalStateException("This date is in the future!");
 		}
@@ -117,7 +113,6 @@ public class ContactManagerImpl implements ContactManager{
 		if (future == null){
 			return null;
 		}
-		//confirming meeting is in the future
 		if (future.getDate().before(Calendar.getInstance())) {
 			throw new IllegalStateException("This date is in the past!");
 		}
@@ -243,7 +238,6 @@ public class ContactManagerImpl implements ContactManager{
 	}
 	
 	/*
-	 * (non-Javadoc)
 	 * @see interfaces.ContactManager#addNewPastMeeting(java.util.Set, java.util.Calendar, java.lang.String)
 	 */
 	
@@ -268,6 +262,9 @@ public class ContactManagerImpl implements ContactManager{
 		return newPastMeeting.getId();
 	}
 	
+	/*
+	 * @see interfaces.ContactManager#addMeetingNotes(int, java.lang.String)
+	 */
 	
 	@Override
 	public PastMeeting addMeetingNotes(int id, String text){
@@ -278,7 +275,7 @@ public class ContactManagerImpl implements ContactManager{
 			throw new IllegalArgumentException("The meeting does not exist");
 		}
 		Meeting got = getPastMeeting(id);
-		if(got.getDate().after(Calendar.getInstance()) || got == null) {
+		if(got.getDate().after(Calendar.getInstance())) {
 			throw new IllegalArgumentException("This is not a past meeting!");
 		}
 		 
@@ -289,12 +286,11 @@ public class ContactManagerImpl implements ContactManager{
 	}
 	
 	/*
-	 * (non-Javadoc)
 	 * @see interfaces.ContactManager#addNewContact(java.lang.String, java.lang.String)
 	 */
 	@Override
 	public int addNewContact(String name, String notes){
-		if (name == "" || notes == ""){
+		if (name.equals("")|| notes.equals("")){
 			throw new IllegalArgumentException("Name/notes is empty!");
 		}
 		contactCount++;
@@ -305,7 +301,6 @@ public class ContactManagerImpl implements ContactManager{
 	}
 	
 	/*
-	 * (non-Javadoc)
 	 * @see interfaces.ContactManager#getContacts(java.lang.String)
 	 */
 
@@ -332,7 +327,7 @@ public class ContactManagerImpl implements ContactManager{
 		int idsSize = ids.length;
 		int contactSize = contacts.size();
 		Set<Contact> filteredContacts = new HashSet<Contact>();
-		//turning into array to search more accurately
+		//turning into array to search more easily
 		Contact[] search = contacts.toArray(new Contact[contactSize]);
 		for(int i = 0; i < idsSize; i++){
 			int toCompare = ids[i];
@@ -348,58 +343,8 @@ public class ContactManagerImpl implements ContactManager{
 		return filteredContacts;
 	}
 	
-	//TO-DO
 	@Override
 	public void flush() {
-		/*
-		FileOutputStream fos = null;
-		try {
-			fos = new FileOutputStream("contacts.txt");
-		} catch (FileNotFoundException e1) {
-			System.out.println("Contacts.txt wasn't found!");
-		}
-		ObjectOutputStream oos;
-
-		try {
-			oos = new ObjectOutputStream(fos);
-			oos.writeObject(contacts);
-			System.out.println("Just about to close flush");
-			oos.close();
-			
-		} catch (IOException e) {
-			System.out.println("Couldn't write contacts to contacts.txt");
-		
-		
-		 File file = new File("contacts.txt");
-		 try (BufferedWriter br = new BufferedWriter(new FileWriter(file))){
-		  	br.write("This is line one");
-		  	System.out.println("This should do it");
-		  } catch (IOException e) {
-		  	System.out.println("Unable to write on file!");
-		  }
-		
-		File file = new File("contacts.txt");
-	    PrintWriter pw = null;
-		try {
-			pw = new PrintWriter(new FileOutputStream(file));
-		} catch (FileNotFoundException e) {
-			System.out.println("Contacts.txt wasn't found!");
-		}
-	    for (Contact contact : contacts)
-	        pw.println(contact.toString());
-	    System.out.println("Saving contact");
-	    pw.close();
-	    *//*
-		File file = new File("contacts.txt");
-	    
-		try (PrintWriter pw = new PrintWriter(new FileOutputStream(file))){
-		    for (Contact contact : contacts)
-		        pw.println(contact.toString());
-		    System.out.println("Saving contact");
-		} catch (FileNotFoundException e) {
-			System.out.println("Contacts.txt wasn't found!");
-		}
-*/
 		try(FileOutputStream fs = new FileOutputStream("contacts.txt")) {
 			
 			ObjectOutputStream os = new ObjectOutputStream(fs);
@@ -417,19 +362,4 @@ public class ContactManagerImpl implements ContactManager{
 	 
 		
 	}
-	/*
-	 * File file = new file("contacts.txt");
-	 * try (BufferedWriter br = new BufferedWriter(new FileWriter(file))){
-	 * 	br.write("This is line one");
-	 * } catch (IOException e) {
-	 * 	System.out.println("Unable to write on file!");
-	 * }
-	 */
-	/*public void save(File fileName) throws FileNotFoundException {
-	    PrintWriter pw = new PrintWriter(new FileOutputStream(fileName));
-	    for (Contact contact : contacts)
-	        pw.println(contact.toString());
-	    System.out.println("Saving contact");
-	    pw.close();
-	}*/
 }

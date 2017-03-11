@@ -19,8 +19,7 @@ import java.util.Set;
 import main.java.spec.*;
 
 public class ContactManagerImpl implements ContactManager{
-
-	protected static Set<Contact> contacts = new HashSet<Contact>();
+  protected static Set<Contact> contacts = new HashSet<Contact>();
 	protected static List<Meeting> meetings = new ArrayList<Meeting>();
 	private static int contactCount;
 	private static int meetingCount;
@@ -44,7 +43,7 @@ public class ContactManagerImpl implements ContactManager{
 			os.close();
 		} catch (FileNotFoundException e) {
 			System.out.println("No saved file: New contacts file being made");
-		} catch (IOException e) {
+	} catch (IOException e) {
 			System.out.println("Couldn't read from this file!");
 		} catch (ClassNotFoundException e) {
 			System.out.println("Couldn't find the right class!");
@@ -81,8 +80,8 @@ public class ContactManagerImpl implements ContactManager{
 			System.out.println("Something else went wrong, see stack trace");
 			e.printStackTrace();
 		}
-		int futureId = newMeeting.getId();
-		return futureId;
+		return newMeeting.getId();
+		
 
 	}
 	 
@@ -172,12 +171,8 @@ public class ContactManagerImpl implements ContactManager{
     		}
 
     	}
-    	//Will this sort the list?
-    	Collections.sort(filteredList, new Comparator<Meeting>() {
-    	    public int compare(Meeting m1, Meeting m2) {
-    	        return m1.getDate().compareTo(m2.getDate());
-    	    }
-    	});
+    	//To sort the list
+    	filteredList.sort(Comparator.comparing(Meeting::getDate));
     	return filteredList;
     }
 	
@@ -200,6 +195,8 @@ public class ContactManagerImpl implements ContactManager{
 				filteredList.add(meeting);
 				}
 			}
+    	//To sort the list
+    	filteredList.sort(Comparator.comparing(Meeting::getDate));
     	return filteredList;
 	}
 	
@@ -234,6 +231,7 @@ public class ContactManagerImpl implements ContactManager{
     		}
 
     	}
+    	pastFilteredList.sort(Comparator.comparing(Meeting::getDate));
     	return pastFilteredList;
 	}
 	

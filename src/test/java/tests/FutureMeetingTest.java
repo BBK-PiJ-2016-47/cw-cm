@@ -1,6 +1,7 @@
-package tests;
+package test.java.tests;
+import main.java.implementations.*;
+import main.java.spec.*;
 
-import interfaces.FutureMeeting;
 import static org.junit.Assert.*;
 
 import java.util.Calendar;
@@ -11,9 +12,6 @@ import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 
-import implementations.ContactImpl;
-import implementations.FutureMeetingImpl;
-import interfaces.Contact;
 public class FutureMeetingTest {
 
 	FutureMeeting test;

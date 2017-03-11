@@ -1,6 +1,6 @@
-package tests;
-import implementations.ContactImpl;
-import interfaces.Contact;
+package test.java.tests;
+import main.java.implementations.ContactImpl;
+import main.java.spec.Contact;
 
 import static org.junit.Assert.*;
 import org.junit.Before;

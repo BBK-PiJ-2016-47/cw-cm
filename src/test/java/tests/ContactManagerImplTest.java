@@ -1,18 +1,9 @@
-package tests;
-import implementations.ContactImpl;
-import implementations.ContactManagerImpl;
-import implementations.FutureMeetingImpl;
-import implementations.PastMeetingImpl;
-import interfaces.Contact;
-import interfaces.ContactManager;
-import interfaces.FutureMeeting;
-import interfaces.Meeting;
-import interfaces.PastMeeting;
+package test.java.tests;
+import main.java.implementations.*;
+import main.java.spec.*;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -27,10 +18,7 @@ public class ContactManagerImplTest {
 	private Calendar pastDate;
 	private Calendar futureDate;
 	private Set<Contact> contacts;
-	private List<Meeting> meetings;
 	private List<Meeting> filteredList;
-	private Meeting pastMeeting;
-	private Meeting futureMeeting;
 	private Contact profX;
 	
 	@Before
@@ -38,10 +26,9 @@ public class ContactManagerImplTest {
 		cm = new ContactManagerImpl();
 		
 		contacts = new HashSet<Contact>();
-		meetings = new ArrayList<Meeting>();
-		filteredList = new ArrayList<Meeting>();
+		//filteredList = new ArrayList<Meeting>();
 		
-		emptyDate = new GregorianCalendar(2014,12,25);
+		emptyDate = new GregorianCalendar(2014,11,25);
 		pastDate = new GregorianCalendar(2016,9,20);
 		futureDate = new GregorianCalendar(2019,9,20);
 
@@ -196,7 +183,7 @@ public class ContactManagerImplTest {
 
  	@Test
  	public void testGetFutureMeetingList() {
- 		boolean aList = true;
+ 		boolean aList;
  		cm.addNewContact("Shadowcat", "don't worry about opening the door");
         Set<Contact> shadowSet = cm.getContacts("Shadowcat");
         cm.addFutureMeeting(shadowSet, futureDate);
@@ -205,7 +192,7 @@ public class ContactManagerImplTest {
  		try {
  		
  		List<Meeting> testFutureList = cm.getFutureMeetingList(shadowCat);
- 		//if this assignment works then method returns a list
+ 		aList = (testFutureList != null);
  		} catch (Exception e){
  			System.out.println("EXCEPTION HERE");
  			aList = false;
@@ -240,19 +227,28 @@ public class ContactManagerImplTest {
 	
 	@Test
 	public void testGetFutureMeetingList_Chronology() {
+		cm.addNewContact("Professor X", "Head of school");
+	    Set<Contact> profXSet = cm.getContacts("Professor X");
+		Iterator<Contact> it = profXSet.iterator();
+	    Contact profX = it.next();
+	    cm.addFutureMeeting(profXSet, futureDate);
+	    
 		filteredList = cm.getFutureMeetingList(profX);
 		int size = filteredList.size();
 		boolean chronological = true;
 		for(int i = 0; i < size; i++){
 			Meeting first = filteredList.get(i);
-			Meeting second = filteredList.get(i + 1);
-			if(first.getDate().after(second.getDate())){
-				chronological = false;
+			Meeting second = null;
+			if ((i+1) != size){
+				second = filteredList.get(i + 1);
+				if(first.getDate().after(second.getDate())){
+					chronological = false;
+				}
 			}
 		}
 		assertTrue(chronological);
 	}
-
+	
 	@Test
 	public void testGetFutureMeetingList_Duplicates() {
 		filteredList = cm.getFutureMeetingList(profX);
@@ -280,10 +276,10 @@ public class ContactManagerImplTest {
 	
 	@Test
 	public void testGetMeetingListOn() {     
-		 		boolean aList = true;
+		 		boolean aList;
  		try {
  		List<Meeting> testList = cm.getMeetingListOn(pastDate);
- 		//if this assignment works then method returns a list
+ 		aList = (testList != null);
  		} catch (Exception e){
  			aList = false;
  		}
@@ -298,14 +294,17 @@ public class ContactManagerImplTest {
 
 	@Test
 	public void testGetMeetingListOn_Chronology() {
-		cm.getMeetingListOn(pastDate);
+		filteredList = cm.getMeetingListOn(pastDate);
 		int size = filteredList.size();
 		boolean chronological = true;
 		for(int i = 0; i < size; i++){
 			Meeting first = filteredList.get(i);
-			Meeting second = filteredList.get(i + 1);
-			if(first.getDate().after(second.getDate())){
-				chronological = false;
+			Meeting second = null;
+			if ((i+1) != size){
+				second = filteredList.get(i + 1);
+				if(first.getDate().after(second.getDate())){
+					chronological = false;
+				}
 			}
 		}
 		assertTrue(chronological);
@@ -313,7 +312,7 @@ public class ContactManagerImplTest {
 
 	@Test
 	public void testGetMeetingListOn_Duplicates() {
-		cm.getMeetingListOn(pastDate);
+		filteredList = cm.getMeetingListOn(pastDate);
 		int size = filteredList.size();
 		boolean duplicate = false;
 		for(int i = 0; i< size; i++){
@@ -341,7 +340,7 @@ public class ContactManagerImplTest {
 
  	@Test
  	public void testGetPastMeetingListFor() {
- 		boolean aList = true;
+ 		boolean aList;
  		cm.addNewContact("Shadowcat", "don't worry about opening the door");
         Set<Contact> shadowSet = cm.getContacts("Shadowcat");
         cm.addNewPastMeeting(shadowSet, pastDate, "notes");
@@ -350,7 +349,7 @@ public class ContactManagerImplTest {
  		try {
  		
  		List<PastMeeting> testPastList = cm.getPastMeetingListFor(shadowCat);
- 		//if this assignment works then method returns a list
+ 		aList = (testPastList != null);
  		} catch (Exception e){
  			System.out.println("EXCEPTION HERE");
  			aList = false;
@@ -384,18 +383,28 @@ public class ContactManagerImplTest {
 	
 	@Test
 	public void testGetPastMeetingList_Chronology() {
+		cm.addNewContact("Professor X", "Head of school");
+        Set<Contact> profXSet = cm.getContacts("Professor X");
+ 		Iterator<Contact> it = profXSet.iterator();
+        Contact profX = it.next();
+        cm.addNewPastMeeting(profXSet, pastDate, "got to see Cerebro");
+        
 		List<PastMeeting> pastFilteredList = cm.getPastMeetingListFor(profX);
 		int size = pastFilteredList.size();
 		boolean chronological = true;
 		for(int i = 0; i < size; i++){
 			Meeting first = pastFilteredList.get(i);
-			Meeting second = pastFilteredList.get(i + 1);
-			if(first.getDate().before(second.getDate())){
-				chronological = false;
+			Meeting second = null;
+			if ((i+1) != size){
+				second = pastFilteredList.get(i + 1);
+				if(first.getDate().after(second.getDate())){
+					chronological = false;
+				}
 			}
 		}
 		assertTrue(chronological);
 	}
+
 
 	@Test
 	public void testGetPastMeetingList_Duplicates() {
@@ -554,14 +563,14 @@ public class ContactManagerImplTest {
 		Set<Contact> newSet = cMa.getContacts("");
 		int originalSize = cMa.getContacts("").size();
 		int compareSize = newSet.size();
-		assertTrue(originalSize == compareSize);
+		assertEquals(originalSize, compareSize);
 	}
  
 	
 	 /**
 	  *
 	  * For getContacts(int... ids) method
-	  
+	  */
 	  
 	  
 		@Test
@@ -572,11 +581,26 @@ public class ContactManagerImplTest {
 		
 		@Test(expected = IllegalArgumentException.class)
 		public void testIllegalArgument_unknownContact() {     
-			Set<Contact> success = cm.getContacts(77);
+			cm.getContacts(77);
 		}
 
 		@Test(expected = IllegalArgumentException.class)
 		public void testIllegalArgument_nullContact() {     
-			Set<Contact> success = cm.getContacts();
-		}*/
+			cm.getContacts();
+		}
+		
+		/*
+		 * For flush() method
+		 * 
+		 */
+		 
+		@Test
+		public void testFlush(){
+			int id = cm.addNewPastMeeting(contacts, pastDate, "notes");
+			cm.flush();
+			ContactManager cmNew = new ContactManagerImpl();
+			int loadedId = cmNew.getPastMeeting(id).getId();
+			assertEquals(id, loadedId);
+			
+		}
 }

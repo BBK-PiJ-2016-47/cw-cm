@@ -1,5 +1,8 @@
-package tests;
-import interfaces.Contact;
+package test.java.tests;
+import main.java.implementations.ContactImpl;
+import main.java.implementations.PastMeetingImpl;
+import main.java.spec.Contact;
+
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.LinkedHashSet;
@@ -8,9 +11,6 @@ import java.util.Set;
 import org.junit.*; 
 import static org.junit.Assert.*;
 import org.junit.Before;
-
-import implementations.ContactImpl;
-import implementations.PastMeetingImpl;
 
 public class PastMeetingTest {
 	

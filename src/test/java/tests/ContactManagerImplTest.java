@@ -2,6 +2,7 @@ package test.java.tests;
 import main.java.implementations.*;
 import main.java.spec.*;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
@@ -26,7 +27,7 @@ public class ContactManagerImplTest {
 		cm = new ContactManagerImpl();
 		
 		contacts = new HashSet<Contact>();
-		//filteredList = new ArrayList<Meeting>();
+		filteredList = new ArrayList<Meeting>();
 		
 		emptyDate = new GregorianCalendar(2014,11,25);
 		pastDate = new GregorianCalendar(2016,9,20);
@@ -36,10 +37,6 @@ public class ContactManagerImplTest {
 		contacts.add(profX);
 	}
 	
-	//method for checking meetings against each other
-	private boolean meetingEquivalence(Object meeting1, Object meeting2) {
-		return (meeting1.equals(meeting2));
-	}
 	
 /**
   *
@@ -232,6 +229,8 @@ public class ContactManagerImplTest {
 		Iterator<Contact> it = profXSet.iterator();
 	    Contact profX = it.next();
 	    cm.addFutureMeeting(profXSet, futureDate);
+	    cm.addFutureMeeting(profXSet,new GregorianCalendar(2019,9,28));
+	    cm.addFutureMeeting(profXSet,new GregorianCalendar(2019,1,28));
 	    
 		filteredList = cm.getFutureMeetingList(profX);
 		int size = filteredList.size();
@@ -251,15 +250,19 @@ public class ContactManagerImplTest {
 	
 	@Test
 	public void testGetFutureMeetingList_Duplicates() {
-		filteredList = cm.getFutureMeetingList(profX);
-		int size = filteredList.size();
-		boolean duplicate = false;
-		for(int i = 0; i< size; i++){
-			if (meetingEquivalence(filteredList.get(i), filteredList.get(i+1))){
-				duplicate = true;
-			}
-		}
-		
+		cm.addNewContact("Professor X", "Head of school");
+	    Set<Contact> profXSet = cm.getContacts("Professor X");
+		Iterator<Contact> it = profXSet.iterator();
+	    Contact profX = it.next();
+	    cm.addFutureMeeting(profXSet, futureDate);
+	    cm.addFutureMeeting(profXSet,new GregorianCalendar(2019,9,28));
+	    cm.addFutureMeeting(profXSet,new GregorianCalendar(2019,1,28));
+	    boolean duplicate = false;
+	    filteredList = cm.getFutureMeetingList(profX);
+	    Set<Meeting> set = new HashSet<Meeting>(filteredList);
+	    if(set.size() < filteredList.size()){
+	    	duplicate = true;
+	    }
 		assertFalse(duplicate);
 	}
 
@@ -297,6 +300,7 @@ public class ContactManagerImplTest {
 		filteredList = cm.getMeetingListOn(pastDate);
 		int size = filteredList.size();
 		boolean chronological = true;
+		
 		for(int i = 0; i < size; i++){
 			Meeting first = filteredList.get(i);
 			Meeting second = null;
@@ -313,14 +317,11 @@ public class ContactManagerImplTest {
 	@Test
 	public void testGetMeetingListOn_Duplicates() {
 		filteredList = cm.getMeetingListOn(pastDate);
-		int size = filteredList.size();
-		boolean duplicate = false;
-		for(int i = 0; i< size; i++){
-			if (meetingEquivalence(filteredList.get(i), filteredList.get(i+1))){
-				duplicate = true;
-			}
-		}
-		
+	    boolean duplicate = false;
+	    Set<Meeting> set = new HashSet<Meeting>(filteredList);
+	    if(set.size() < filteredList.size()){
+	    	duplicate = true;
+	    }
 		assertFalse(duplicate);
 	}
 
@@ -408,15 +409,20 @@ public class ContactManagerImplTest {
 
 	@Test
 	public void testGetPastMeetingList_Duplicates() {
+		cm.addNewContact("Professor X", "Head of school");
+	    Set<Contact> profXSet = cm.getContacts("Professor X");
+		Iterator<Contact> it = profXSet.iterator();
+	    Contact profX = it.next();
+	    cm.addNewPastMeeting(profXSet, pastDate, "notes");
+	    cm.addNewPastMeeting(profXSet,new GregorianCalendar(2015,9,28), "notes");
+	    cm.addNewPastMeeting(profXSet,new GregorianCalendar(2015,1,28), "notes");
+	    
 		List<PastMeeting> pastFilteredList = cm.getPastMeetingListFor(profX);
-		int size = pastFilteredList.size();
 		boolean duplicate = false;
-		for(int i = 0; i< size; i++){
-			if (meetingEquivalence(pastFilteredList.get(i), pastFilteredList.get(i+1))){
-				duplicate = true;
-			}
-		}
-		
+	    Set<Meeting> set = new HashSet<Meeting>(pastFilteredList);
+	    if(set.size() < pastFilteredList.size()){
+	    	duplicate = true;
+	    }
 		assertFalse(duplicate);
 	}
 	

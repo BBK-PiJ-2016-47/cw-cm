@@ -2,6 +2,7 @@ package test.java.tests;
 import main.java.implementations.ContactImpl;
 import main.java.implementations.PastMeetingImpl;
 import main.java.spec.Contact;
+import main.java.spec.Meeting;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -10,7 +11,6 @@ import java.util.Set;
 
 import org.junit.*; 
 import static org.junit.Assert.*;
-import org.junit.Before;
 
 public class PastMeetingTest {
 	

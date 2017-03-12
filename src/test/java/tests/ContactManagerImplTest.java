@@ -163,7 +163,7 @@ public class ContactManagerImplTest {
   
   @Test
   public void testGetFutureMeetingList() {
-    boolean aNewList;
+    boolean theNewList;
     cm.addNewContact("Shadowcat", "don't worry about opening the door");
     Set<Contact> shadowSet = cm.getContacts("Shadowcat");
     cm.addFutureMeeting(shadowSet, futureDate);
@@ -171,12 +171,12 @@ public class ContactManagerImplTest {
     Contact shadowCat = it.next();
     try {
       List<Meeting> testFutureList = cm.getFutureMeetingList(shadowCat);
-      aNewList = (testFutureList != null);
+      theNewList = (testFutureList != null);
     } catch (Exception ex) {
       System.out.println("EXCEPTION HERE");
-      aNewList = false;
+      theNewList = false;
     }
-    assertTrue(aNewList);
+    assertTrue(theNewList);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -203,15 +203,19 @@ public class ContactManagerImplTest {
 
   @Test
   public void testGetFutureMeetingList_Chronology() {
-    cm.addNewContact("Professor X", "Head of school");
-    Set<Contact> profXSet = cm.getContacts("Professor X");
-    Iterator<Contact> it = profXSet.iterator();
-    Contact profX = it.next();
-    cm.addFutureMeeting(profXSet, futureDate);
-    cm.addFutureMeeting(profXSet,new GregorianCalendar(2019,9,28));
-    cm.addFutureMeeting(profXSet,new GregorianCalendar(2019,1,28));
+    cm.addNewContact("Rogue", "Give her some gloves");
+    Set<Contact> rogueSet = cm.getContacts("Rogue");
+    Iterator<Contact> it = rogueSet.iterator();
+    Contact rogue = it.next();
+    cm.addFutureMeeting(rogueSet, futureDate);
+    cm.addFutureMeeting(rogueSet,new GregorianCalendar(2019,9,28));
+    cm.addFutureMeeting(rogueSet,new GregorianCalendar(2019,1,28));
+    cm.addFutureMeeting(rogueSet, (new GregorianCalendar(2018, 7, 25)));
+    cm.addFutureMeeting(rogueSet, (new GregorianCalendar(2018, 3, 24)));
+    cm.addFutureMeeting(rogueSet, (new GregorianCalendar(2018, 7, 13)));
+    cm.addFutureMeeting(rogueSet, (new GregorianCalendar(2018, 7, 6)));
 
-    filteredList = cm.getFutureMeetingList(profX);
+    filteredList = cm.getFutureMeetingList(rogue);
     int size = filteredList.size();
     boolean chronological = true;
     for (int i = 0; i < size; i++) {
@@ -252,14 +256,14 @@ public class ContactManagerImplTest {
 
   @Test
   public void testGetMeetingListOn() {     
-    boolean aNewList;
+    boolean theNewList;
     try {
       List<Meeting> testList = cm.getMeetingListOn(pastDate);
-      aNewList = (testList != null);     
+      theNewList = (testList != null);     
     } catch (Exception ex) {
-      aNewList = false;
+      theNewList = false;
     }
-    assertTrue(aNewList);
+    assertTrue(theNewList);
   }
 
   @Test
@@ -310,7 +314,7 @@ public class ContactManagerImplTest {
   
   @Test
   public void testGetPastMeetingListFor() {
-    boolean aNewList;
+    boolean theNewList;
     cm.addNewContact("Shadowcat", "don't worry about opening the door");
     Set<Contact> shadowSet = cm.getContacts("Shadowcat");
     cm.addNewPastMeeting(shadowSet, pastDate, "notes");
@@ -318,12 +322,12 @@ public class ContactManagerImplTest {
     Contact shadowCat = it.next();
     try {
       List<PastMeeting> testPastList = cm.getPastMeetingListFor(shadowCat);
-      aNewList = (testPastList != null);
+      theNewList = (testPastList != null);
     } catch (Exception ex) {
       System.out.println("EXCEPTION HERE");
-      aNewList = false;
+      theNewList = false;
     }
-    assertTrue(aNewList);
+    assertTrue(theNewList);
   }
 
   @Test(expected = IllegalArgumentException.class)

@@ -1,6 +1,15 @@
 package main.java.implementations;
 
-public class MockObjectMeetingImpl {
+import java.util.Calendar;
+import java.util.Set;
 
-	//need mock object to test MeetingImpl
+import main.java.spec.Contact;
+import main.java.spec.Meeting;
+
+public class MockObjectMeetingImpl extends MeetingImpl implements Meeting{
+  public MockObjectMeetingImpl(int id, Calendar date, Set<Contact> contacts) throws Exception {
+    super(id, date, contacts);
+  }
+  
+ 
 }

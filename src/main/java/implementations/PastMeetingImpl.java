@@ -1,11 +1,12 @@
 package main.java.implementations;
 
+import java.util.Calendar;
+import java.util.Set;
+
 import main.java.spec.Contact;
 import main.java.spec.PastMeeting;
 
-import java.util.*;
-
-public class PastMeetingImpl extends MeetingImpl implements PastMeeting{
+public class PastMeetingImpl extends MeetingImpl implements PastMeeting {
   private static final long serialVersionUID = -92033211010420020L;
   private String notes;
 

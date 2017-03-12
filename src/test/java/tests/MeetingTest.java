@@ -53,7 +53,6 @@ public class MeetingTest {
     Set<Contact> changeContacts = new HashSet<Contact>();
     changeContacts = test.getContacts();
     changeContacts.add(new ContactImpl(3, "Jean Grey", "Has a bit of a temper sometimes"));
-    System.out.println("Contacts size: " + changeContacts.size() + " meeting contact size: " + test.getContacts().size());
     assertFalse(changeContacts.size() == test.getContacts().size());
   }
 }

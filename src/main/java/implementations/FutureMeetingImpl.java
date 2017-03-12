@@ -6,9 +6,11 @@ import java.util.Set;
 import main.java.spec.Contact;
 import main.java.spec.FutureMeeting;
 
-public class FutureMeetingImpl extends MeetingImpl implements FutureMeeting{	
+public class FutureMeetingImpl extends MeetingImpl implements FutureMeeting {
+  
+  private static final long serialVersionUID = 40807695573875798L;
 
-	public FutureMeetingImpl(int id, Calendar date, Set<Contact> contacts) throws Exception{
-		super(id, date,contacts);
-	}
+  public FutureMeetingImpl(int id, Calendar date, Set<Contact> contacts) throws Exception {
+    super(id, date,contacts);
+  }
 }

@@ -19,7 +19,7 @@ public class MainScript {
 		//Meeting pastMeeting = new PastMeetingImpl(1, pastDate,contacts,"Here are some notes");
 		//Meeting futureMeeting = new FutureMeetingImpl(1001, futureDate, contacts);
 	
-
+/*
 		System.out.println(cm.addNewContact("Storm", "don't do weather small talk"));
 
 		System.out.println(cm.addNewContact("Professor X", "headmaster of Xavier's school for gifted youngsters"));
@@ -99,6 +99,7 @@ public class MainScript {
 		}
 		
 		cm.flush();
-
+*/
+		
 	}
 }

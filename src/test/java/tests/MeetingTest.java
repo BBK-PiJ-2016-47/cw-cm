@@ -1,9 +1,11 @@
-/*package tests;
-import implementations.FutureMeetingImpl;
-import implementations.MeetingImpl;
-import interfaces.Contact;
-import interfaces.FutureMeeting;
-import interfaces.Meeting;
+/*
+package test.java.tests;
+import  main.java.implementations.FutureMeetingImpl;
+import  main.java.implementations.MeetingImpl;
+import main.java.implementations.PastMeetingImpl;
+import  main.java.spec.Contact;
+import main.java.spec.FutureMeeting;
+import main.java.spec.Meeting;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -40,6 +42,15 @@ public class MeetingTest {
 		assertEquals(9, test.getDate().get(Calendar.MONTH));
 		assertEquals(20, test.getDate().get(Calendar.DATE));
 	}
+	
+    @Test
+    public void testContactsImmutableFromOutsideObject() {
+    	Calendar pastDate = new GregorianCalendar(2012, 4, 12);
+        Meeting meeting = new PastMeetingImpl(1, pastDate, contacts, "notes");
+        Set<Contact> contacts = meeting.getContacts();
+        contacts.add(new MockContactImpl());
+        assertFalse(contacts.size() == meeting.getContacts().size());
+    }
 
 }
 */

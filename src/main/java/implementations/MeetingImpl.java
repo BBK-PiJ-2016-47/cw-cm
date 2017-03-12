@@ -2,6 +2,7 @@ package main.java.implementations;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import main.java.spec.Contact;
 import main.java.spec.Meeting;
@@ -42,6 +43,6 @@ public abstract class MeetingImpl implements Meeting, Serializable {
 
   @Override
   public Set<Contact> getContacts() {
-    return this.contacts;
+    return (new LinkedHashSet<Contact>(contacts));
   }
 }

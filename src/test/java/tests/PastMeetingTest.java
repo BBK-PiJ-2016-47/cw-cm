@@ -24,7 +24,7 @@ public class PastMeetingTest {
 
   @Before
   public void setUp() throws Exception {
-    profX = new ContactImpl(5, "Professor X", "Headmaster at Xavier's School for Gifted Youngsters");
+    profX = new ContactImpl(5, "Professor X", "Headmaster at Xavier's School");
     date = new GregorianCalendar(2016,9,20);
     contacts = new LinkedHashSet<Contact>();
     contacts.add(profX);

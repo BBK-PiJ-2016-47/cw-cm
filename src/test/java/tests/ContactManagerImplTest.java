@@ -16,10 +16,12 @@ import main.java.spec.FutureMeeting;
 import main.java.spec.Meeting;
 import main.java.spec.PastMeeting;
 
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
-
-import org.junit.*;
-import static org.junit.Assert.*;
 
 public class ContactManagerImplTest {
   private ContactManager cm;
@@ -206,7 +208,8 @@ public class ContactManagerImplTest {
     cm.addNewContact("Rogue", "Give her some gloves");
     Set<Contact> rogueSet = cm.getContacts("Rogue");
     Iterator<Contact> it = rogueSet.iterator();
-    Contact rogue = it.next();
+    Contact rogue = null;
+    rogue = it.next();
     cm.addFutureMeeting(rogueSet, futureDate);
     cm.addFutureMeeting(rogueSet,new GregorianCalendar(2019,9,28));
     cm.addFutureMeeting(rogueSet,new GregorianCalendar(2019,1,28));
@@ -236,7 +239,8 @@ public class ContactManagerImplTest {
     cm.addNewContact("Professor X", "Head of school");
     Set<Contact> profXSet = cm.getContacts("Professor X");
     Iterator<Contact> it = profXSet.iterator();
-    Contact profX = it.next();
+    Contact profX = null;
+    profX = it.next();
     cm.addFutureMeeting(profXSet, futureDate);
     cm.addFutureMeeting(profXSet,new GregorianCalendar(2019,9,28));
     cm.addFutureMeeting(profXSet,new GregorianCalendar(2019,1,28));

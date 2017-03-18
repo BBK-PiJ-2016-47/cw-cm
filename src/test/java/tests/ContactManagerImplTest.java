@@ -549,7 +549,7 @@ public class ContactManagerImplTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void testIllegalArgument_unknownContact() {
-    cm.getContacts(77);
+    cm.getContacts(19477);
   }
 
   @Test(expected = IllegalArgumentException.class)

@@ -11,7 +11,7 @@ public class ContactImpl implements Contact, Serializable {
   private String name;
   private String notes;
 
-public ContactImpl(int id, String name, String notes){
+  public ContactImpl(int id, String name, String notes){
     if (id < 1) {
       throw new IllegalArgumentException("Must be a positive non-zero integer");
     }

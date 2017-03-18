@@ -23,8 +23,8 @@ import main.java.spec.PastMeeting;
 public class ContactManagerImpl implements ContactManager {
   protected static Set<Contact> contacts = new HashSet<Contact>();
   protected static List<Meeting> meetings = new ArrayList<Meeting>();
-  private static int contactCount;
-  private static int meetingCount;
+  private static int contactCount = 0;
+  private static int meetingCount = 0;
   
   /*
   * 
@@ -67,9 +67,10 @@ public class ContactManagerImpl implements ContactManager {
       throw new IllegalArgumentException("Contact set is empty");
     }
     FutureMeeting newMeeting = null;
+    int newId = 0;
     try {
       meetingCount++;
-      int newId = meetingCount;
+      newId = meetingCount;
       newMeeting = new FutureMeetingImpl(newId, date, contacts);
       meetings.add(newMeeting);
     } catch (IllegalArgumentException ex) {
@@ -80,7 +81,7 @@ public class ContactManagerImpl implements ContactManager {
       System.out.println("Something else went wrong, see stack trace");
       ex.printStackTrace();
     }
-    return newMeeting.getId();
+    return newId;
   }
 
   /*
@@ -116,7 +117,6 @@ public class ContactManagerImpl implements ContactManager {
   }
 
   /*
-  * (non-Javadoc)
   * @see interfaces.ContactManager#getMeeting(int)
   */
 
@@ -124,21 +124,20 @@ public class ContactManagerImpl implements ContactManager {
   public Meeting getMeeting(int id) {
     Meeting meetingGot = null;
     try {
-      //id number is one more than array index so ids are > 1
+      //id number is one more than array index so ids are start at > 1
       int placeInArray = (id - 1);
       if (placeInArray > meetings.size()) {
         return null;
       }
       meetingGot = meetings.get(placeInArray);
     } catch (Exception ex) {
-      System.out.println("There is another issue (see stack trace)");
+      System.out.println("There is an unexpected issue (see stack trace)");
       ex.printStackTrace();
     }
     return meetingGot;
   }
 
   /*
-  * (non-Javadoc)
   * @see interfaces.ContactManager#getFutureMeetingList(interfaces.Contact)
   */
   @Override
@@ -172,7 +171,6 @@ public class ContactManagerImpl implements ContactManager {
   }
 
   /*
-  * (non-Javadoc)
   * @see interfaces.ContactManager#getMeetingListOn(java.util.Calendar)
   */
 
@@ -194,7 +192,6 @@ public class ContactManagerImpl implements ContactManager {
   }
 
   /*
-  * (non-Javadoc)
   * @see interfaces.ContactManager#getPastMeetingListFor(interfaces.Contact)
   */
 
@@ -240,15 +237,17 @@ public class ContactManagerImpl implements ContactManager {
     if (date.after(Calendar.getInstance())) {
       throw new IllegalArgumentException("This date is in the future!");
     }
+    int newId = 0;
     try {
       meetingCount++;
       newPastMeeting = new PastMeetingImpl(meetingCount, date, contacts, text);
       meetings.add(newPastMeeting);
+      newId = newPastMeeting.getId();
     } catch (Exception ex) {
       System.out.println("Check those parameters you entered!");
       ex.printStackTrace();
     }
-    return newPastMeeting.getId();
+    return newId;
   }
 
   /*

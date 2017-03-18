@@ -19,7 +19,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
 public class MeetingTest {
-	
+
   private Meeting test;
   private Calendar date;
   private final Set<Contact> meetingContacts = new LinkedHashSet<Contact>();

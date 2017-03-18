@@ -90,7 +90,7 @@ public class ContactManagerImpl implements ContactManager {
   @Override
   public PastMeeting getPastMeeting(int id) {
     Meeting past = getMeeting(id);
-    if (past == null) {
+   if (past == null) {
       return null;
     }
     if (past.getDate().after(Calendar.getInstance())) {

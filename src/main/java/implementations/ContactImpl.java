@@ -24,6 +24,12 @@ public class ContactImpl implements Contact, Serializable {
   }
 
   public ContactImpl(int id, String name) {
+    if (id < 1) {
+      throw new IllegalArgumentException("Must be a positive non-zero integer");
+    }
+    if (name == null || notes == null) {
+      throw new NullPointerException("Name/notes cannot be null!");
+    }
     this.id = id;
     this.name = name;
   }

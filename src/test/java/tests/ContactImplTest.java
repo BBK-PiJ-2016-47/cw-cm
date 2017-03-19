@@ -10,28 +10,37 @@ import org.junit.Test;
 
 public class ContactImplTest {
   private Contact test;
+  private Contact test2;
 
   @Before
   public void buildUp() {
-    test = new ContactImpl(2, "Wolverine", "");
+    test = new ContactImpl(2, "Wolverine", "notes");
+    test2 = new ContactImpl(2, "Wolverine");
   }
 
   @Test
-  public void checkGetters() {
+  public void checkGetters1() {
     assertTrue(test.getId() != 0);
     assertTrue(test.getId() > 0);
     assertTrue(test.getName().equals("Wolverine"));
   }
   
   @Test
+  public void checkGetters2() {
+    assertTrue(test2.getId() != 0);
+    assertTrue(test2.getId() > 0);
+    assertTrue(test2.getName().equals("Wolverine"));
+  }
+  
+  @Test
   public void checkAddAndGetNotes() {
-    String output = test.getNotes();
+    String output = test2.getNotes();
     assertTrue(output.equals(""));
-    test.addNotes("Can be challenging");
-    output = test.getNotes();
+    test2.addNotes("Can be challenging");
+    output = test2.getNotes();
     assertTrue(output.equals("; Can be challenging"));
-    test.addNotes("has good hair");
-    output = test.getNotes();
+    test2.addNotes("has good hair");
+    output = test2.getNotes();
     assertTrue(output.equals("; Can be challenging; has good hair"));
   }
 }

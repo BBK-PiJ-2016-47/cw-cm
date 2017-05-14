@@ -1,1 +1,26 @@
+Please look at the general comments to see if any apply.
 
+It would have been good to adopt the gradle/maven directory 
+structure; please do so going forward.
+
+Did you run the static analysis tools over your code (e.g., 
+findbugs, checkstyle, etc.)?
+
+A reasonable set of tests.
+
+Add javadoc even for private fields and methods.
+
+If your code may throw an explicit exception then consider adding
+a "throws" clause to the method signature even if the exception
+is unchecked.
+
+If you comment out large sections of code remove them from the 
+code you submit. After all, you have a source code control system
+so you can always roll the code back to an earlier point.
+
+Why were certain of the fields marked as "protected"?
+
+Again, CMimpl includes blocks of commented out code; please don't 
+submit code in this form.
+
+Good attempt. Merit.
